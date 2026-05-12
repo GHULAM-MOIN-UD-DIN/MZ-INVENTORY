@@ -7,15 +7,15 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-            <h2 class="text-3xl font-extrabold tracking-tight text-orange-500">
+            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-orange-500">
                 System Configuration
             </h2>
-            <p class="text-slate-500 dark:text-slate-400 mt-1">Manage your shop identity and administrator profile.</p>
+            <p class="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-1">Manage your shop identity and administrator profile.</p>
         </div>
     </div>
 
     @if(session('success'))
-        <div class="bg-orange-500/10 border-l-4 border-orange-500 p-4 rounded-xl animate-slide-up">
+        <div class="bg-orange-500/10 border-l-4 border-orange-500 p-4 rounded-xl animate-slide-up mx-4 md:mx-0">
             <div class="flex items-center gap-3">
                 <i class="fas fa-check-circle text-orange-500"></i>
                 <p class="text-sm font-bold text-orange-700 dark:text-orange-400">{{ session('success') }}</p>
@@ -23,7 +23,7 @@
         </div>
     @endif
 
-    <form action="{{ route('setting.update') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+    <form action="{{ route('setting.update') }}" method="POST" enctype="multipart/form-data" class="space-y-8 px-4 md:px-0">
         @csrf
         
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -32,12 +32,12 @@
                 <!-- Shop Settings -->
                 <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-800/60 overflow-hidden stagger-1 animate-slide-up">
                     <div class="h-1.5 bg-gradient-to-r from-orange-400 to-orange-600"></div>
-                    <div class="p-8 space-y-6">
+                    <div class="p-5 sm:p-8 space-y-6">
                         <div class="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
                             <div class="w-10 h-10 rounded-xl bg-orange-500/10 text-orange-500 flex items-center justify-center">
-                                <i class="fas fa-shop text-lg"></i>
+                                <i class="fas fa-shop text-sm md:text-lg"></i>
                             </div>
-                            <h3 class="text-lg font-bold">Shop Identity</h3>
+                            <h3 class="text-base md:text-lg font-bold">Shop Identity</h3>
                         </div>
 
                         <div class="form-group group">
@@ -45,22 +45,25 @@
                             <input type="text" name="shop_name" class="form-input" value="{{ $setting->shop_name }}" required>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                            <div class="space-y-2">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-6">
+                            <div class="space-y-1">
                                 <label class="form-label">Shop Logo</label>
                                 <p class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Recommended: Square PNG</p>
                             </div>
-                            <div class="relative group cursor-pointer">
-                                <input type="file" name="shop_logo" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+                            <div class="relative group cursor-pointer flex-1">
+                                <input type="file" name="shop_logo" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="previewImage(this, 'shopLogoPreview')">
                                 <div class="px-6 py-4 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl flex items-center gap-4 group-hover:border-orange-500/50 transition-all">
-                                    <div class="w-12 h-12 rounded-lg bg-slate-50 dark:bg-slate-800 overflow-hidden flex-shrink-0">
+                                    <div class="w-14 h-14 rounded-lg bg-slate-50 dark:bg-slate-800 overflow-hidden flex-shrink-0 border border-slate-100 dark:border-slate-800">
                                         @if($setting->shop_logo)
-                                            <img src="{{ asset('storage/' . $setting->shop_logo) }}" class="w-full h-full object-cover">
+                                            <img src="{{ asset('storage/' . $setting->shop_logo) }}" id="shopLogoPreview" class="w-full h-full object-cover">
                                         @else
-                                            <div class="w-full h-full flex items-center justify-center text-slate-300"><i class="fas fa-image"></i></div>
+                                            <div class="w-full h-full flex items-center justify-center text-slate-300" id="shopLogoPreview"><i class="fas fa-image text-xl"></i></div>
                                         @endif
                                     </div>
-                                    <span class="text-xs font-bold text-slate-500 uppercase">Change Logo</span>
+                                    <div class="flex flex-col">
+                                        <span class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase">Change Logo</span>
+                                        <span class="text-[10px] text-slate-400">Click to browse files</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

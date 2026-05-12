@@ -23,37 +23,37 @@
     </div>
 
     <!-- Stats Overview -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 stagger-2">
-        <div class="premium-card p-6">
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Total Revenue</p>
-            <h3 class="text-2xl font-extrabold mt-1 text-orange-500">Rs. {{ number_format($sales->sum('grand_total'), 2) }}</h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 stagger-2 px-4 md:px-0">
+        <div class="premium-card p-4 md:p-6">
+            <p class="text-[8px] md:text-xs font-bold text-slate-400 uppercase tracking-widest">Revenue</p>
+            <h3 class="text-base md:text-2xl font-extrabold mt-1 text-orange-500">Rs. {{ number_format($sales->sum('grand_total'), 0) }}</h3>
         </div>
-        <div class="premium-card p-6">
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Orders Count</p>
-            <h3 class="text-2xl font-extrabold mt-1">{{ $sales->count() }}</h3>
+        <div class="premium-card p-4 md:p-6">
+            <p class="text-[8px] md:text-xs font-bold text-slate-400 uppercase tracking-widest">Orders</p>
+            <h3 class="text-base md:text-2xl font-extrabold mt-1">{{ $sales->count() }}</h3>
         </div>
-        <div class="premium-card p-6">
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Active Orders</p>
-            <h3 class="text-2xl font-extrabold mt-1">{{ $sales->where('status', 'Completed')->count() }}</h3>
+        <div class="premium-card p-4 md:p-6">
+            <p class="text-[8px] md:text-xs font-bold text-slate-400 uppercase tracking-widest">Active</p>
+            <h3 class="text-base md:text-2xl font-extrabold mt-1">{{ $sales->where('status', 'Completed')->count() }}</h3>
         </div>
-        <div class="premium-card p-6">
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Avg. Order</p>
-            <h3 class="text-2xl font-extrabold mt-1 text-orange-500">Rs. {{ number_format($sales->avg('grand_total') ?? 0, 2) }}</h3>
+        <div class="premium-card p-4 md:p-6">
+            <p class="text-[8px] md:text-xs font-bold text-slate-400 uppercase tracking-widest">Avg Order</p>
+            <h3 class="text-base md:text-2xl font-extrabold mt-1 text-orange-500">Rs. {{ number_format($sales->avg('grand_total') ?? 0, 0) }}</h3>
         </div>
     </div>
 
     <!-- Sales Table -->
-    <div class="premium-card overflow-hidden stagger-3">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left">
+    <div class="premium-card overflow-hidden stagger-3 mx-4 md:mx-0">
+        <div class="overflow-x-auto custom-scrollbar">
+            <table class="w-full text-left min-w-[1000px]">
                 <thead>
                     <tr class="bg-slate-50/50 dark:bg-slate-900/50">
-                        <th class="py-4 px-8 text-xs font-bold uppercase tracking-widest text-slate-400">Transaction Info</th>
-                        <th class="py-4 px-8 text-xs font-bold uppercase tracking-widest text-slate-400">Customer</th>
-                        <th class="py-4 px-8 text-xs font-bold uppercase tracking-widest text-slate-400 text-center">Status</th>
-                        <th class="py-4 px-8 text-xs font-bold uppercase tracking-widest text-slate-400 text-center">Amount</th>
-                        <th class="py-4 px-8 text-xs font-bold uppercase tracking-widest text-slate-400 text-center">Payment</th>
-                        <th class="py-4 px-8 text-xs font-bold uppercase tracking-widest text-slate-400 text-right">Actions</th>
+                        <th class="py-4 px-6 text-[10px] font-bold uppercase tracking-widest text-slate-400">Transaction</th>
+                        <th class="py-4 px-6 text-[10px] font-bold uppercase tracking-widest text-slate-400">Customer</th>
+                        <th class="py-4 px-6 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-center">Status</th>
+                        <th class="py-4 px-6 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-center">Amount</th>
+                        <th class="py-4 px-6 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-center">Payment</th>
+                        <th class="py-4 px-6 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800">

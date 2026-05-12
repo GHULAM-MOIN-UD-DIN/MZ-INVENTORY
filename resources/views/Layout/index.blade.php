@@ -142,8 +142,17 @@
         }
 
         .main-content {
-            margin-left: var(--w-sidebar);
+            margin-left: 0;
+            width: 100%;
+            overflow-x: hidden;
             transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (min-width: 1024px) {
+            .main-content {
+                margin-left: var(--w-sidebar);
+                width: calc(100% - var(--w-sidebar));
+            }
         }
 
         .nav-link {
