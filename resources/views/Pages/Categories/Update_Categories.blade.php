@@ -67,7 +67,7 @@
                 <div class="flex flex-col md:flex-row items-start gap-8">
                     @if($category->image)
                         <div class="w-40 h-40 rounded-2xl overflow-hidden border-2 border-orange-500/20 shadow-xl shrink-0 group relative">
-                            <img src="{{ $category->image ? Storage::url($category->image) : asset('assets/images/no-image.png') }}" class="w-full h-full object-cover">
+                            <img src="{{ $category->image ? cloudinary_url($category->image) : asset('assets/images/no-image.png') }}" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <span class="text-white text-[10px] font-bold uppercase tracking-widest">Current Image</span>
                             </div>

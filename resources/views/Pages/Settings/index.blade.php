@@ -55,7 +55,7 @@
                                 <div class="px-6 py-4 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl flex items-center gap-4 group-hover:border-orange-500/50 transition-all">
                                     <div class="w-14 h-14 rounded-lg bg-slate-50 dark:bg-slate-800 overflow-hidden flex-shrink-0 border border-slate-100 dark:border-slate-800">
                                         @if($setting->shop_logo)
-                                            <img src="{{ $setting->shop_logo ? Storage::url($setting->shop_logo) : asset('assets/images/no-image.png') }}" id="shopLogoPreview" class="w-full h-full object-cover">
+                                            <img src="{{ $setting->shop_logo ? cloudinary_url($setting->shop_logo) : asset('assets/images/no-image.png') }}" id="shopLogoPreview" class="w-full h-full object-cover">
                                         @else
                                             <div class="w-full h-full flex items-center justify-center text-slate-300" id="shopLogoPreview"><i class="fas fa-image text-xl"></i></div>
                                         @endif
@@ -103,7 +103,7 @@
                         <div class="relative inline-block group">
                             <div class="w-32 h-32 rounded-3xl overflow-hidden border-4 border-white dark:border-slate-800 shadow-2xl mx-auto ring-4 ring-orange-500/20">
                                 @if($setting->admin_photo)
-                                    <img src="{{ $setting->admin_photo ? Storage::url($setting->admin_photo) : 'https://api.dicebear.com/7.x/avataaars/svg?seed=' . $setting->admin_name }}" class="w-full h-full object-cover" id="adminPhotoPreview">
+                                    <img src="{{ $setting->admin_photo ? cloudinary_url($setting->admin_photo) : 'https://api.dicebear.com/7.x/avataaars/svg?seed=' . $setting->admin_name }}" class="w-full h-full object-cover" id="adminPhotoPreview">
                                 @endif
                             </div>
                             <label class="absolute -bottom-2 -right-2 w-10 h-10 bg-orange-500 text-white rounded-xl flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform border-4 border-white dark:border-slate-900">

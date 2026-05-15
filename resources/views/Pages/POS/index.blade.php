@@ -35,7 +35,7 @@
                     <div onclick="addToCart({{ json_encode($p) }})" 
                          class="premium-card group cursor-pointer hover:border-orange-500 transition-all active:scale-95 overflow-hidden">
                         <div class="h-28 sm:h-32 bg-slate-50 dark:bg-slate-800 relative">
-                            <img src="{{ $p->image ? Storage::url($p->image) : 'https://ui-avatars.com/api/?name='.urlencode($p->name).'&background=f97316&color=fff' }}" 
+                            <img src="{{ $p->image ? cloudinary_url($p->image) : 'https://ui-avatars.com/api/?name='.urlencode($p->name).'&background=f97316&color=fff' }}" 
                                  class="w-full h-full object-cover group-hover:scale-110 transition-transform">
                             <div class="absolute top-2 right-2 px-1.5 py-0.5 bg-orange-500 text-white text-[8px] font-black rounded-md">
                                 Qty: {{ $p->quantity }}

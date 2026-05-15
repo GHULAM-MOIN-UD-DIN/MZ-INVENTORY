@@ -60,7 +60,7 @@
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 overflow-hidden border border-slate-200 dark:border-slate-700 flex-shrink-0">
                                         @if($product->image)
-                                            <img src="{{ $product->image ? Storage::url($product->image) : 'https://ui-avatars.com/api/?name='.urlencode($product->name).'&background=f97316&color=fff' }}" class="w-full h-full object-cover">
+                                            <img src="{{ $product->image ? cloudinary_url($product->image) : 'https://ui-avatars.com/api/?name='.urlencode($product->name).'&background=f97316&color=fff' }}" class="w-full h-full object-cover">
                                         @else
                                             <div class="w-full h-full flex items-center justify-center bg-orange-500/10 text-orange-500 text-xs font-bold">
                                                 {{ substr($product->name, 0, 2) }}
