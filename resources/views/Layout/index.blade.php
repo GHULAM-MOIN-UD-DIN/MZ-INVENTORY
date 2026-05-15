@@ -240,7 +240,7 @@
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-gradient-to-tr from-orange-600 to-orange-400 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/30 animate-float overflow-hidden">
                         @if($settings && $settings->shop_logo)
-                            <img src="{{ asset('storage/' . $settings->shop_logo) }}" class="w-full h-full object-cover">
+                            <img src="{{ ($settings && $settings->shop_logo) ? Storage::url($settings->shop_logo) : 'https://api.dicebear.com/7.x/shapes/svg?seed=Inventory' }}" class="w-full h-full object-cover">
                         @else
                             <span class="text-white font-extrabold text-lg">{{ substr($settings->shop_name ?? 'MZ', 0, 2) }}</span>
                         @endif
@@ -340,7 +340,7 @@
                 <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800">
                     <div class="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center text-white font-bold shadow-md shadow-orange-500/20 overflow-hidden">
                         @if($settings && $settings->admin_photo)
-                            <img src="{{ asset('storage/' . $settings->admin_photo) }}" class="w-full h-full object-cover">
+                            <img src="{{ ($settings && $settings->admin_photo) ? Storage::url($settings->admin_photo) : 'https://api.dicebear.com/7.x/avataaars/svg?seed=' . ($settings->admin_name ?? 'Admin') }}" class="w-full h-full object-cover">
                         @else
                             {{ substr($settings->admin_name ?? 'Admin', 0, 2) }}
                         @endif
@@ -394,7 +394,7 @@
                     </div>
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-800 border-2 border-white dark:border-slate-800 overflow-hidden shadow-sm">
                         @if($settings && $settings->admin_photo)
-                            <img src="{{ asset('storage/' . $settings->admin_photo) }}" class="w-full h-full object-cover">
+                            <img src="{{ ($settings && $settings->admin_photo) ? Storage::url($settings->admin_photo) : 'https://api.dicebear.com/7.x/avataaars/svg?seed=' . ($settings->admin_name ?? 'Admin') }}" class="w-full h-full object-cover">
                         @else
                             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ $settings->admin_name ?? 'Admin' }}" alt="User">
                         @endif
@@ -466,8 +466,13 @@
         @if(session('success'))
             Swal.fire({ icon: 'success', title: 'Success!', text: "{{ session('success') }}", confirmButtonColor: '#f97316' });
         @endif
-        @if(session('error'))
-            Swal.fire({ icon: 'error', title: 'Error', text: "{{ session('error') }}", confirmButtonColor: '#f97316' });
+        @if($errors->any())
+            Swal.fire({ 
+                icon: 'error', 
+                title: 'Validation Error', 
+                html: '<ul class="text-left">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>', 
+                confirmButtonColor: '#f97316' 
+            });
         @endif
     </script>
 </body>

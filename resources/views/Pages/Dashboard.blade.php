@@ -109,7 +109,7 @@
                     <div class="flex items-center justify-between p-3 rounded-xl bg-orange-500/5 border border-orange-500/10 group hover:bg-orange-500/10 transition-all">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-lg bg-white dark:bg-slate-800 overflow-hidden border border-slate-100 dark:border-slate-800">
-                                <img src="{{ $p->image ? asset($p->image) : 'https://ui-avatars.com/api/?name='.urlencode($p->name).'&background=f97316&color=fff' }}" class="w-full h-full object-cover">
+                                <img src="{{ $p->image ? Storage::url($p->image) : 'https://ui-avatars.com/api/?name='.urlencode($p->name).'&background=f97316&color=fff' }}" class="w-full h-full object-cover">
                             </div>
                             <div>
                                 <p class="text-xs font-bold truncate max-w-[120px]">{{ $p->name }}</p>
@@ -187,7 +187,7 @@
                     <div class="flex items-center justify-between group">
                         <div class="flex items-center gap-4">
                             <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden border border-slate-100 dark:border-slate-800">
-                                <img src="{{ $p->image ? asset($p->image) : 'https://ui-avatars.com/api/?name='.urlencode($p->name).'&background=f97316&color=fff' }}" class="w-full h-full object-cover">
+                                <img src="{{ $p->image ? Storage::url($p->image) : 'https://ui-avatars.com/api/?name='.urlencode($p->name).'&background=f97316&color=fff' }}" class="w-full h-full object-cover">
                             </div>
                             <div>
                                 <p class="text-sm font-bold">{{ $p->name }}</p>

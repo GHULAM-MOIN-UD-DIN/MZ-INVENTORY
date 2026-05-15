@@ -25,9 +25,7 @@ class CategoriesController extends Controller
         $data = $request->all();
 
         if ($request->hasFile('image')) {
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('images/categories'), $imageName);
-            $data['image'] = $imageName;
+            $data['image'] = $request->file('image')->store('categories', 'cloudinary');
         }
 
         Category::create($data);
@@ -54,9 +52,7 @@ class CategoriesController extends Controller
         $data = $request->all();
 
         if ($request->hasFile('image')) {
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('images/categories'), $imageName);
-            $data['image'] = $imageName;
+            $data['image'] = $request->file('image')->store('categories', 'cloudinary');
         }
 
         $category->update($data);

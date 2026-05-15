@@ -27,17 +27,11 @@ class SettingController extends Controller
         ]);
 
         if ($request->hasFile('shop_logo')) {
-            if ($setting->shop_logo) {
-                Storage::disk('public')->delete($setting->shop_logo);
-            }
-            $data['shop_logo'] = $request->file('shop_logo')->store('settings', 'public');
+            $data['shop_logo'] = $request->file('shop_logo')->store('settings', 'cloudinary');
         }
 
         if ($request->hasFile('admin_photo')) {
-            if ($setting->admin_photo) {
-                Storage::disk('public')->delete($setting->admin_photo);
-            }
-            $data['admin_photo'] = $request->file('admin_photo')->store('settings', 'public');
+            $data['admin_photo'] = $request->file('admin_photo')->store('settings', 'cloudinary');
         }
 
         $setting->update($data);

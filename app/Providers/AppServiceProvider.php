@@ -19,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        \Illuminate\Support\Facades\View::share('settings', \App\Models\Setting::first());
+        if (\Illuminate\Support\Facades\Schema::hasTable('settings')) {
+            \Illuminate\Support\Facades\View::share('settings', \App\Models\Setting::first());
+        }
     }
 }

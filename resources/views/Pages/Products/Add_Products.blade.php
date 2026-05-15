@@ -130,6 +130,31 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="form-group group">
+                        <label class="form-label flex items-center gap-1">
+                            Barcode Symbology 
+                            <span class="text-orange-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <select name="barcode_symbology" 
+                                    class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 
+                                           bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200
+                                           focus:border-orange-500 focus:bg-white dark:focus:bg-slate-900 
+                                           focus:ring-4 focus:ring-orange-500/10 transition-all duration-300
+                                           appearance-none cursor-pointer" required>
+                                <option value="C128" selected class="bg-white dark:bg-slate-800">Code 128</option>
+                                <option value="C39" class="bg-white dark:bg-slate-800">Code 39</option>
+                                <option value="EAN8" class="bg-white dark:bg-slate-800">EAN 8</option>
+                                <option value="EAN13" class="bg-white dark:bg-slate-800">EAN 13</option>
+                                <option value="UPCA" class="bg-white dark:bg-slate-800">UPC-A</option>
+                                <option value="UPCE" class="bg-white dark:bg-slate-800">UPC-E</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                                <i class="fas fa-barcode text-slate-400 text-xs"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -189,6 +214,24 @@
                                           focus:border-orange-500 focus:bg-white dark:focus:bg-slate-900 
                                           focus:ring-4 focus:ring-orange-500/10 transition-all duration-300" 
                                    placeholder="0" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group group">
+                        <label class="form-label">Tax Method <span class="text-orange-500">*</span></label>
+                        <div class="relative">
+                            <select name="tax_method" 
+                                    class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 
+                                           bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200
+                                           focus:border-orange-500 focus:bg-white dark:focus:bg-slate-900 
+                                           focus:ring-4 focus:ring-orange-500/10 transition-all duration-300
+                                           appearance-none cursor-pointer" required>
+                                <option value="Exclusive" selected class="bg-white dark:bg-slate-800">Exclusive</option>
+                                <option value="Inclusive" class="bg-white dark:bg-slate-800">Inclusive</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                                <i class="fas fa-percent text-slate-400 text-xs"></i>
+                            </div>
                         </div>
                     </div>
                 </div>

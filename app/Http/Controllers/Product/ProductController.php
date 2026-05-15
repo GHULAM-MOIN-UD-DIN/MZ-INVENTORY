@@ -27,6 +27,7 @@ class ProductController extends Controller
             'cost' => 'required|numeric',
             'price' => 'required|numeric',
             'quantity' => 'required|numeric',
+            'tax_method' => 'required',
             'category_id' => 'required|exists:categories,id'
         ]);
 
@@ -34,9 +35,7 @@ class ProductController extends Controller
 
         // Upload Image
         if ($request->hasFile('image')) {
-            $imageName = time().'.'.$request->image->extension();
-            $request->image->move(public_path('uploads/products'), $imageName);
-            $data['image'] = 'uploads/products/' . $imageName;
+            $data['image'] = $request->file('image')->store('products', 'cloudinary');
         }
 
         Product::create($data);
@@ -67,15 +66,14 @@ class ProductController extends Controller
             'cost' => 'required|numeric',
             'price' => 'required|numeric',
             'quantity' => 'required|numeric',
+            'tax_method' => 'required',
             'category_id' => 'required|exists:categories,id'
         ]);
 
         $data = $request->all();
 
         if ($request->hasFile('image')) {
-            $imageName = time().'.'.$request->image->extension();
-            $request->image->move(public_path('uploads/products'), $imageName);
-            $data['image'] = 'uploads/products/' . $imageName;
+            $data['image'] = $request->file('image')->store('products', 'cloudinary');
         }
 
         $product->update($data);

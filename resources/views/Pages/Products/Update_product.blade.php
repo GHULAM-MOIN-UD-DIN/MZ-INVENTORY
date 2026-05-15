@@ -77,6 +77,16 @@
                             <option value="CODE39" {{ $product->barcode_symbology == 'CODE39' ? 'selected' : '' }}>CODE39</option>
                             <option value="EAN8" {{ $product->barcode_symbology == 'EAN8' ? 'selected' : '' }}>EAN8</option>
                             <option value="EAN13" {{ $product->barcode_symbology == 'EAN13' ? 'selected' : '' }}>EAN13</option>
+                            <option value="UPCA" {{ $product->barcode_symbology == 'UPCA' ? 'selected' : '' }}>UPC-A</option>
+                            <option value="UPCE" {{ $product->barcode_symbology == 'UPCE' ? 'selected' : '' }}>UPC-E</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group group">
+                        <label class="form-label">Tax Method *</label>
+                        <select name="tax_method" class="form-input appearance-none" required>
+                            <option value="Exclusive" {{ $product->tax_method == 'Exclusive' ? 'selected' : '' }}>Exclusive</option>
+                            <option value="Inclusive" {{ $product->tax_method == 'Inclusive' ? 'selected' : '' }}>Inclusive</option>
                         </select>
                     </div>
                 </div>
@@ -131,7 +141,7 @@
                 <div class="flex flex-col md:flex-row items-start gap-8">
                     @if($product->image)
                         <div class="w-48 h-48 rounded-2xl overflow-hidden border-2 border-orange-500/20 shadow-xl shrink-0 group relative">
-                            <img src="{{ asset($product->image) }}" class="w-full h-full object-cover">
+                            <img src="{{ $product->image ? Storage::url($product->image) : asset('assets/images/no-image.png') }}" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <span class="text-white text-[10px] font-bold uppercase tracking-widest">Current Image</span>
                             </div>

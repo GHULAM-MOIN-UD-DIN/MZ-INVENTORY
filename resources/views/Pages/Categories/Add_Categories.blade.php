@@ -52,12 +52,15 @@
                     </label>
                     <div class="relative">
                         <input type="text" name="name" 
-                               class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 
+                               class="w-full px-4 py-3 rounded-xl border-2 @error('name') border-red-500 @else border-slate-200 dark:border-slate-700 @enderror 
                                       bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200
                                       focus:border-orange-500 focus:bg-white dark:focus:bg-slate-900 
                                       focus:ring-4 focus:ring-orange-500/10 transition-all duration-300
                                       placeholder:text-slate-400 dark:placeholder:text-slate-500" 
-                               placeholder="e.g. Electronics, Smartphones, Furniture" required>
+                               placeholder="e.g. Electronics, Smartphones, Furniture" value="{{ old('name') }}" required>
+                        @error('name')
+                            <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
             </div>
