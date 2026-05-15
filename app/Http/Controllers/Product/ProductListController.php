@@ -11,6 +11,6 @@ class ProductListController extends Controller
     public function index()
     {
         $products = Product::with('category')->latest()->paginate(10);
-        return view('pages.products.list_product', compact('products'));
+        return view('Pages.Products.List_Product', compact('products'));
     }
 }
