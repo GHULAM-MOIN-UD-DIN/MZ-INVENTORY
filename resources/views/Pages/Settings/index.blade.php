@@ -30,6 +30,7 @@
             <!-- Left Side: Shop & Profile -->
             <div class="lg:col-span-2 space-y-8">
                 <!-- Shop Settings -->
+                @if(auth()->user()->role === 'admin')
                 <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-800/60 overflow-hidden stagger-1 animate-slide-up">
                     <div class="h-1.5 bg-gradient-to-r from-orange-400 to-orange-600"></div>
                     <div class="p-5 sm:p-8 space-y-6">
@@ -69,6 +70,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
 
                 <!-- User Profile -->
                 <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-800/60 overflow-hidden stagger-2 animate-slide-up">

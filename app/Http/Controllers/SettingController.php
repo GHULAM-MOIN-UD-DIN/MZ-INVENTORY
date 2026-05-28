@@ -17,15 +17,20 @@ class SettingController extends Controller
     {
         $user = Auth::user();
 
-        $data = $request->validate([
-            'shop_name' => 'nullable|string|max:255',
+        $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-            'shop_logo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-        ]);
+        ];
 
-        if ($request->hasFile('shop_logo')) {
+        if ($user->role === 'admin') {
+            $rules['shop_name'] = 'nullable|string|max:255';
+            $rules['shop_logo'] = 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048';
+        }
+
+        $data = $request->validate($rules);
+
+        if ($user->role === 'admin' && $request->hasFile('shop_logo')) {
             $data['shop_logo'] = $request->file('shop_logo')->store('settings', 'cloudinary');
         }
 

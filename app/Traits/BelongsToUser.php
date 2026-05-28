@@ -12,14 +12,14 @@ trait BelongsToUser
         // Automatically inject user_id when creating new records
         static::creating(function ($model) {
             if (Auth::check() && !$model->user_id) {
-                $model->user_id = Auth::id();
+                $model->user_id = Auth::user()->admin_id ?? Auth::id();
             }
         });
 
-        // Automatically filter select queries to logged-in user's records
+        // Automatically filter select queries to logged-in user's records (parent admin or self)
         static::addGlobalScope('user_scope', function (Builder $builder) {
             if (Auth::check()) {
-                $builder->where($builder->getQuery()->from . '.user_id', Auth::id());
+                $builder->where($builder->getQuery()->from . '.user_id', Auth::user()->admin_id ?? Auth::id());
             }
         });
     }

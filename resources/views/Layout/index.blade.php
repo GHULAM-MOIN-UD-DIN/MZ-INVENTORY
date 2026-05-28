@@ -264,29 +264,31 @@
                 <a href="/" class="nav-link {{ request()->is('/') ? 'active' : '' }}"><i class="fas fa-gauge-high"></i><span>Dashboard</span></a>
                 <a href="{{ route('pos.index') }}" class="nav-link {{ request()->is('pos*') ? 'active' : '' }}"><i class="fas fa-cash-register text-orange-500"></i><span class="text-orange-500 font-black">Point of Sale</span></a>
 
-                <!-- Inventory Dropdown -->
-                <div class="px-6 mt-6 mb-2"><p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Inventory</p></div>
-                <div class="group">
-                    <button onclick="toggleSubmenu('products-sub')" class="nav-link w-[calc(100%-2rem)] flex justify-between {{ request()->is('products*') ? 'active' : '' }}">
-                        <div class="flex items-center"><i class="fas fa-boxes-stacked"></i><span>Products</span></div>
-                        <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="products-sub-icon"></i>
-                    </button>
-                    <div id="products-sub" class="{{ request()->is('products*') ? '' : 'hidden' }} py-1">
-                        <a href="{{ route('product.index') }}" class="sub-link {{ request()->is('products') ? 'active' : '' }}">All Products</a>
-                        <a href="{{ route('product.create') }}" class="sub-link {{ request()->is('products/add') ? 'active' : '' }}">Add Product</a>
+                @if(auth()->user()->role === 'admin' || auth()->user()->role === 'manager')
+                    <!-- Inventory Dropdown -->
+                    <div class="px-6 mt-6 mb-2"><p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Inventory</p></div>
+                    <div class="group">
+                        <button onclick="toggleSubmenu('products-sub')" class="nav-link w-[calc(100%-2rem)] flex justify-between {{ request()->is('products*') ? 'active' : '' }}">
+                            <div class="flex items-center"><i class="fas fa-boxes-stacked"></i><span>Products</span></div>
+                            <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="products-sub-icon"></i>
+                        </button>
+                        <div id="products-sub" class="{{ request()->is('products*') ? '' : 'hidden' }} py-1">
+                            <a href="{{ route('product.index') }}" class="sub-link {{ request()->is('products') ? 'active' : '' }}">All Products</a>
+                            <a href="{{ route('product.create') }}" class="sub-link {{ request()->is('products/add') ? 'active' : '' }}">Add Product</a>
+                        </div>
                     </div>
-                </div>
 
-                <div class="group">
-                    <button onclick="toggleSubmenu('cats-sub')" class="nav-link w-[calc(100%-2rem)] flex justify-between {{ request()->is('categories*') ? 'active' : '' }}">
-                        <div class="flex items-center"><i class="fas fa-tags"></i><span>Categories</span></div>
-                        <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="cats-sub-icon"></i>
-                    </button>
-                    <div id="cats-sub" class="{{ request()->is('categories*') ? '' : 'hidden' }} py-1">
-                        <a href="{{ route('category.index') }}" class="sub-link {{ request()->is('categories') ? 'active' : '' }}">All Categories</a>
-                        <a href="{{ route('category.create') }}" class="sub-link {{ request()->is('categories/add') ? 'active' : '' }}">Add Category</a>
+                    <div class="group">
+                        <button onclick="toggleSubmenu('cats-sub')" class="nav-link w-[calc(100%-2rem)] flex justify-between {{ request()->is('categories*') ? 'active' : '' }}">
+                            <div class="flex items-center"><i class="fas fa-tags"></i><span>Categories</span></div>
+                            <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="cats-sub-icon"></i>
+                        </button>
+                        <div id="cats-sub" class="{{ request()->is('categories*') ? '' : 'hidden' }} py-1">
+                            <a href="{{ route('category.index') }}" class="sub-link {{ request()->is('categories') ? 'active' : '' }}">All Categories</a>
+                            <a href="{{ route('category.create') }}" class="sub-link {{ request()->is('categories/add') ? 'active' : '' }}">Add Category</a>
+                        </div>
                     </div>
-                </div>
+                @endif
 
                 <!-- Transactions Dropdown -->
                 <div class="px-6 mt-6 mb-2"><p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Transactions</p></div>
@@ -301,39 +303,53 @@
                     </div>
                 </div>
 
-                <div class="group">
-                    <button onclick="toggleSubmenu('purchases-sub')" class="nav-link w-[calc(100%-2rem)] flex justify-between {{ request()->is('purchases*') ? 'active' : '' }}">
-                        <div class="flex items-center"><i class="fas fa-cart-shopping"></i><span>Purchases</span></div>
-                        <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="purchases-sub-icon"></i>
-                    </button>
-                    <div id="purchases-sub" class="{{ request()->is('purchases*') ? '' : 'hidden' }} py-1">
-                        <a href="{{ route('purchase.index') }}" class="sub-link {{ request()->is('purchases') ? 'active' : '' }}">Purchase History</a>
-                        <a href="{{ route('purchase.create') }}" class="sub-link {{ request()->is('purchases/add') ? 'active' : '' }}">Create Purchase</a>
+                @if(auth()->user()->role === 'admin' || auth()->user()->role === 'manager')
+                    <div class="group">
+                        <button onclick="toggleSubmenu('purchases-sub')" class="nav-link w-[calc(100%-2rem)] flex justify-between {{ request()->is('purchases*') ? 'active' : '' }}">
+                            <div class="flex items-center"><i class="fas fa-cart-shopping"></i><span>Purchases</span></div>
+                            <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="purchases-sub-icon"></i>
+                        </button>
+                        <div id="purchases-sub" class="{{ request()->is('purchases*') ? '' : 'hidden' }} py-1">
+                            <a href="{{ route('purchase.index') }}" class="sub-link {{ request()->is('purchases') ? 'active' : '' }}">Purchase History</a>
+                            <a href="{{ route('purchase.create') }}" class="sub-link {{ request()->is('purchases/add') ? 'active' : '' }}">Create Purchase</a>
+                        </div>
                     </div>
-                </div>
+                @endif
 
-                <!-- People Dropdown -->
+                <!-- People & Reports -->
                 <div class="px-6 mt-6 mb-2"><p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">People & Reports</p></div>
-                <div class="group">
-                    <button onclick="toggleSubmenu('people-sub')" class="nav-link w-[calc(100%-2rem)] flex justify-between {{ request()->is('customers*') || request()->is('suppliers*') ? 'active' : '' }}">
-                        <div class="flex items-center"><i class="fas fa-user-group"></i><span>People</span></div>
-                        <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="people-sub-icon"></i>
-                    </button>
-                    <div id="people-sub" class="{{ request()->is('customers*') || request()->is('suppliers*') ? '' : 'hidden' }} py-1">
-                        <a href="{{ route('customer.index') }}" class="sub-link {{ request()->is('customers*') ? 'active' : '' }}">Customers</a>
-                        <a href="{{ route('supplier.index') }}" class="sub-link {{ request()->is('suppliers*') ? 'active' : '' }}">Suppliers</a>
+                
+                @if(auth()->user()->role === 'admin' || auth()->user()->role === 'manager')
+                    <div class="group">
+                        <button onclick="toggleSubmenu('people-sub')" class="nav-link w-[calc(100%-2rem)] flex justify-between {{ request()->is('customers*') || request()->is('suppliers*') || request()->is('people/users*') ? 'active' : '' }}">
+                            <div class="flex items-center"><i class="fas fa-user-group"></i><span>People</span></div>
+                            <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="people-sub-icon"></i>
+                        </button>
+                        <div id="people-sub" class="{{ request()->is('customers*') || request()->is('suppliers*') || request()->is('people/users*') ? '' : 'hidden' }} py-1">
+                            <a href="{{ route('customer.index') }}" class="sub-link {{ request()->is('customers*') ? 'active' : '' }}">Customers</a>
+                            <a href="{{ route('supplier.index') }}" class="sub-link {{ request()->is('suppliers*') ? 'active' : '' }}">Suppliers</a>
+                            @if(auth()->user()->role === 'admin')
+                                <a href="{{ route('user.index') }}" class="sub-link {{ request()->is('people/users*') ? 'active' : '' }}">System Users</a>
+                            @endif
+                        </div>
                     </div>
-                </div>
 
-                <a href="{{ route('report.index') }}" class="nav-link {{ request()->is('reports*') ? 'active' : '' }}">
-                    <i class="fas fa-chart-line"></i><span>Reports</span>
-                </a>
+                    <a href="{{ route('report.index') }}" class="nav-link {{ request()->is('reports*') ? 'active' : '' }}">
+                        <i class="fas fa-chart-line"></i><span>Reports</span>
+                    </a>
+                @else
+                    <a href="{{ route('customer.index') }}" class="nav-link {{ request()->is('customers*') ? 'active' : '' }}">
+                        <i class="fas fa-user-group"></i><span>Customers</span>
+                    </a>
+                @endif
 
-                <!-- App Settings -->
-                <div class="px-6 mt-6 mb-2"><p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Configuration</p></div>
-                <a href="{{ route('setting.index') }}" class="nav-link {{ request()->is('settings*') ? 'active' : '' }}">
-                    <i class="fas fa-cog"></i><span>App Settings</span>
-                </a>
+                @if(auth()->user()->role === 'admin')
+                    <!-- App Settings -->
+                    <div class="px-6 mt-6 mb-2"><p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Configuration</p></div>
+                    <a href="{{ route('setting.index') }}" class="nav-link {{ request()->is('settings*') ? 'active' : '' }}">
+                        <i class="fas fa-cog"></i><span>App Settings</span>
+                    </a>
+                @endif
             </nav>
 
             <div class="p-6 border-t border-slate-100 dark:border-slate-800">

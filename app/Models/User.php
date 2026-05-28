@@ -25,7 +25,34 @@ class User extends Authenticatable
         'photo',
         'shop_name',
         'shop_logo',
+        'admin_id',
     ];
+
+    public function parentAdmin()
+    {
+        return $this->belongsTo(User::class, 'admin_id');
+    }
+
+    public function staffMembers()
+    {
+        return $this->hasMany(User::class, 'admin_id');
+    }
+
+    public function getShopNameAttribute($value)
+    {
+        if ($this->role === 'admin') {
+            return $value ?? 'MZ Inventory';
+        }
+        return $this->parentAdmin ? ($this->parentAdmin->shop_name ?? 'MZ Inventory') : 'MZ Inventory';
+    }
+
+    public function getShopLogoAttribute($value)
+    {
+        if ($this->role === 'admin') {
+            return $value;
+        }
+        return $this->parentAdmin ? $this->parentAdmin->shop_logo : null;
+    }
 
     /**
      * The attributes that should be hidden for serialization.
