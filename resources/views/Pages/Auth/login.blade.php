@@ -88,15 +88,10 @@
         <!-- Brand identity logo -->
         <div class="text-center mb-8 animate-float">
             <div class="inline-flex w-16 h-16 bg-gradient-to-tr from-orange-600 to-orange-400 rounded-2xl items-center justify-center shadow-2xl shadow-orange-500/30 overflow-hidden mb-3">
-                @if($settings && $settings->shop_logo)
-                    <img src="{{ cloudinary_url($settings->shop_logo) }}" class="w-full h-full object-cover">
-                @else
-                    <span class="text-white font-extrabold text-2xl">MZ</span>
-                @endif
+                <span class="text-white font-extrabold text-2xl">MZ</span>
             </div>
             <h1 class="font-display font-black text-2xl tracking-tight leading-none text-white">
-                {{ explode(' ', $settings->shop_name ?? 'MZ Inventory')[0] }}
-                <span class="text-orange-500">{{ explode(' ', $settings->shop_name ?? 'MZ Inventory')[1] ?? 'Inventory' }}</span>
+                MZ <span class="text-orange-500">Inventory</span>
             </h1>
             <p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-[0.25em] font-bold mt-2">Sign in to control dashboard</p>
         </div>

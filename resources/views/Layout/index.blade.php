@@ -239,16 +239,16 @@
             <div class="p-6 flex items-center justify-between gap-3">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-gradient-to-tr from-orange-600 to-orange-400 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/30 animate-float overflow-hidden">
-                        @if($settings && $settings->shop_logo)
-                            <img src="{{ ($settings && $settings->shop_logo) ? cloudinary_url($settings->shop_logo) : 'https://api.dicebear.com/7.x/shapes/svg?seed=Inventory' }}" class="w-full h-full object-cover">
+                        @if(auth()->user()->shop_logo)
+                            <img src="{{ cloudinary_url(auth()->user()->shop_logo) }}" class="w-full h-full object-cover">
                         @else
-                            <span class="text-white font-extrabold text-lg">{{ substr($settings->shop_name ?? 'MZ', 0, 2) }}</span>
+                            <span class="text-white font-extrabold text-lg">{{ substr(auth()->user()->shop_name ?? 'MZ', 0, 2) }}</span>
                         @endif
                     </div>
                     <div>
                         <h1 class="font-display font-extrabold text-lg leading-none tracking-tight">
-                            {{ explode(' ', $settings->shop_name ?? 'MZ Inventory')[0] }} 
-                            <span class="text-orange-500">{{ explode(' ', $settings->shop_name ?? 'MZ Inventory')[1] ?? '' }}</span>
+                            {{ explode(' ', auth()->user()->shop_name ?? 'MZ Inventory')[0] }} 
+                            <span class="text-orange-500">{{ explode(' ', auth()->user()->shop_name ?? 'MZ Inventory')[1] ?? '' }}</span>
                         </h1>
                         <p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] font-bold mt-1">Management</p>
                     </div>
@@ -339,8 +339,8 @@
             <div class="p-6 border-t border-slate-100 dark:border-slate-800">
                 <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800">
                     <div class="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center text-white font-bold shadow-md shadow-orange-500/20 overflow-hidden">
-                        @if(auth()->user()->role === 'admin' && $settings && $settings->admin_photo)
-                            <img src="{{ cloudinary_url($settings->admin_photo) }}" class="w-full h-full object-cover">
+                        @if(auth()->user()->photo)
+                            <img src="{{ cloudinary_url(auth()->user()->photo) }}" class="w-full h-full object-cover">
                         @else
                             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ urlencode(auth()->user()->name) }}" class="w-full h-full object-cover">
                         @endif
@@ -400,8 +400,8 @@
                         <p class="text-[10px] text-slate-400 mt-1">{{ auth()->user()->email }}</p>
                     </div>
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-800 border-2 border-white dark:border-slate-800 overflow-hidden shadow-sm">
-                        @if(auth()->user()->role === 'admin' && $settings && $settings->admin_photo)
-                            <img src="{{ cloudinary_url($settings->admin_photo) }}" class="w-full h-full object-cover">
+                        @if(auth()->user()->photo)
+                            <img src="{{ cloudinary_url(auth()->user()->photo) }}" class="w-full h-full object-cover">
                         @else
                             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ urlencode(auth()->user()->name) }}" class="w-full h-full object-cover">
                         @endif

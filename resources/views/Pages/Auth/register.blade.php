@@ -83,112 +83,107 @@
     <div class="absolute top-1/2 left-1/3 w-80 h-80 bg-orange-500/10 rounded-full filter blur-[100px] animate-pulse-slow" style="animation-delay: 2s;"></div>
 
     <!-- Register Container -->
-    <div class="w-full max-w-[500px] relative z-10 animate-slide-up my-8">
+    <div class="w-full max-w-[460px] relative z-10 animate-slide-up my-4">
         
         <!-- Brand identity logo -->
-        <div class="text-center mb-8 animate-float">
-            <div class="inline-flex w-16 h-16 bg-gradient-to-tr from-orange-600 to-orange-400 rounded-2xl items-center justify-center shadow-2xl shadow-orange-500/30 overflow-hidden mb-3">
-                @if($settings && $settings->shop_logo)
-                    <img src="{{ cloudinary_url($settings->shop_logo) }}" class="w-full h-full object-cover">
-                @else
-                    <span class="text-white font-extrabold text-2xl">MZ</span>
-                @endif
+        <div class="text-center mb-4 animate-float">
+            <div class="inline-flex w-12 h-12 bg-gradient-to-tr from-orange-600 to-orange-400 rounded-xl items-center justify-center shadow-xl shadow-orange-500/30 overflow-hidden mb-2">
+                <span class="text-white font-extrabold text-xl">MZ</span>
             </div>
-            <h1 class="font-display font-black text-2xl tracking-tight leading-none text-white">
-                {{ explode(' ', $settings->shop_name ?? 'MZ Inventory')[0] }}
-                <span class="text-orange-500">{{ explode(' ', $settings->shop_name ?? 'MZ Inventory')[1] ?? 'Inventory' }}</span>
+            <h1 class="font-display font-black text-xl tracking-tight leading-none text-white">
+                MZ <span class="text-orange-500">Inventory</span>
             </h1>
-            <p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-[0.25em] font-bold mt-2">Create your administrator or staff account</p>
+            <p class="text-[9px] text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] font-bold mt-1">Create your administrator or staff account</p>
         </div>
 
         <!-- Glassmorphic Form Card -->
-        <div class="glass-panel rounded-3xl p-8 sm:p-10 relative overflow-hidden">
+        <div class="glass-panel rounded-2xl p-6 sm:p-8 relative overflow-hidden">
             <!-- Subtle Orange Top Line -->
-            <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-orange-500 to-orange-600"></div>
+            <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 to-orange-600"></div>
 
-            <div class="mb-8">
-                <h2 class="text-xl font-bold text-white">Get Started</h2>
-                <p class="text-xs text-slate-400 mt-1">Register a new profile in seconds.</p>
+            <div class="mb-4">
+                <h2 class="text-lg font-bold text-white leading-tight">Get Started</h2>
+                <p class="text-[11px] text-slate-400">Register a new profile in seconds.</p>
             </div>
 
             <!-- Registration Form -->
-            <form action="{{ route('register') }}" method="POST" class="space-y-5">
+            <form action="{{ route('register') }}" method="POST" class="space-y-3.5">
                 @csrf
 
                 <!-- Name Input -->
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Full Name</label>
+                <div class="space-y-1">
+                    <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider">Full Name</label>
                     <div class="relative group">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400 group-focus-within:text-orange-500 transition-colors">
-                            <i class="fas fa-user"></i>
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 group-focus-within:text-orange-500 transition-colors">
+                            <i class="fas fa-user text-xs"></i>
                         </span>
                         <input type="text" name="name" value="{{ old('name') }}" required placeholder="John Doe"
-                               class="form-input-premium w-full pl-11 pr-4 py-3 rounded-xl text-sm text-white placeholder-slate-500">
+                               class="form-input-premium w-full pl-10 pr-4 py-2 rounded-lg text-xs text-white placeholder-slate-500">
                     </div>
                 </div>
 
                 <!-- Email Input -->
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Email Address</label>
+                <div class="space-y-1">
+                    <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider">Email Address</label>
                     <div class="relative group">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400 group-focus-within:text-orange-500 transition-colors">
-                            <i class="fas fa-envelope"></i>
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 group-focus-within:text-orange-500 transition-colors">
+                            <i class="fas fa-envelope text-xs"></i>
                         </span>
                         <input type="email" name="email" value="{{ old('email') }}" required placeholder="your.name@example.com"
-                               class="form-input-premium w-full pl-11 pr-4 py-3 rounded-xl text-sm text-white placeholder-slate-500">
+                               class="form-input-premium w-full pl-10 pr-4 py-2 rounded-lg text-xs text-white placeholder-slate-500">
                     </div>
                 </div>
 
                 <!-- Role Selection -->
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">System Role</label>
+                <div class="space-y-1">
+                    <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider">System Role</label>
                     <div class="relative group">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400 group-focus-within:text-orange-500 transition-colors">
-                            <i class="fas fa-user-tag text-xs"></i>
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 group-focus-within:text-orange-500 transition-colors">
+                            <i class="fas fa-user-tag text-[10px]"></i>
                         </span>
-                        <select name="role" required class="form-input-premium w-full pl-11 pr-4 py-3 rounded-xl text-sm text-slate-300 appearance-none cursor-pointer">
+                        <select name="role" required class="form-input-premium w-full pl-10 pr-4 py-2 rounded-lg text-xs text-slate-300 appearance-none cursor-pointer">
                             <option value="admin" class="bg-slate-900 text-white">Administrator (Full Access)</option>
                             <option value="manager" class="bg-slate-900 text-white">Manager (Moderate Access)</option>
                             <option value="cashier" class="bg-slate-900 text-white" selected>Cashier (Limited Access)</option>
                         </select>
-                        <span class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 pointer-events-none">
-                            <i class="fas fa-chevron-down text-xs"></i>
+                        <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 pointer-events-none">
+                            <i class="fas fa-chevron-down text-[10px]"></i>
                         </span>
                     </div>
                 </div>
 
                 <!-- Password Input -->
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Password</label>
+                <div class="space-y-1">
+                    <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider">Password</label>
                     <div class="relative group">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400 group-focus-within:text-orange-500 transition-colors">
-                            <i class="fas fa-lock"></i>
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 group-focus-within:text-orange-500 transition-colors">
+                            <i class="fas fa-lock text-xs"></i>
                         </span>
                         <input type="password" name="password" required placeholder="Min. 8 characters"
-                               class="form-input-premium w-full pl-11 pr-4 py-3 rounded-xl text-sm text-white placeholder-slate-500">
+                               class="form-input-premium w-full pl-10 pr-4 py-2 rounded-lg text-xs text-white placeholder-slate-500">
                     </div>
                 </div>
 
                 <!-- Confirm Password Input -->
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Confirm Password</label>
+                <div class="space-y-1">
+                    <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider">Confirm Password</label>
                     <div class="relative group">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400 group-focus-within:text-orange-500 transition-colors">
-                            <i class="fas fa-shield-halved"></i>
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 group-focus-within:text-orange-500 transition-colors">
+                            <i class="fas fa-shield-halved text-xs"></i>
                         </span>
                         <input type="password" name="password_confirmation" required placeholder="Repeat password"
-                               class="form-input-premium w-full pl-11 pr-4 py-3 rounded-xl text-sm text-white placeholder-slate-500">
+                               class="form-input-premium w-full pl-10 pr-4 py-2 rounded-lg text-xs text-white placeholder-slate-500">
                     </div>
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="w-full py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl shadow-lg shadow-orange-500/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 mt-2">
+                <button type="submit" class="w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-lg shadow-lg shadow-orange-500/10 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-1.5 mt-3 text-xs">
                     <i class="fas fa-user-plus"></i> Create Account
                 </button>
             </form>
 
             <!-- Registration Redirect Link -->
-            <div class="mt-6 text-center border-t border-slate-800 pt-5">
+            <div class="mt-4 text-center border-t border-slate-800 pt-3.5">
                 <p class="text-xs text-slate-400 font-medium">
                     Already have an account? 
                     <a href="{{ route('login') }}" class="text-orange-500 font-bold hover:text-orange-400 transition-colors ml-1">Sign In</a>
@@ -197,7 +192,7 @@
         </div>
         
         <!-- Footer info -->
-        <p class="text-center text-[10px] text-slate-500 uppercase tracking-widest mt-8 font-bold">&copy; 2026 MZ Inventory Pro &bull; All Rights Reserved</p>
+        <p class="text-center text-[9px] text-slate-500 uppercase tracking-widest mt-4 font-bold">&copy; 2026 MZ Inventory Pro &bull; All Rights Reserved</p>
     </div>
 
     <!-- SweetAlert notifications -->

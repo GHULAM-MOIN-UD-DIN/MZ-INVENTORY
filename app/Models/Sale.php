@@ -1,9 +1,12 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\BelongsToUser;
 
 class Sale extends Model
 {
+    use BelongsToUser;
+
     protected $fillable = [
         'reference', 'customer_id', 'date', 'status', 'payment_status', 
         'grand_total', 'cash_received', 'change_return', 'service_charge', 

@@ -58,10 +58,9 @@ class AuthController extends Controller
             'role' => $data['role'],
         ]);
 
-        Auth::login($user);
-
-        return redirect('/')
-            ->with('success', 'Account created successfully! Welcome to MZ Inventory.');
+        // Do not auto-login the user, redirect to login page instead
+        return redirect('/login')
+            ->with('success', 'Account created successfully! Please sign in with your credentials.');
     }
 
     public function logout(Request $request)

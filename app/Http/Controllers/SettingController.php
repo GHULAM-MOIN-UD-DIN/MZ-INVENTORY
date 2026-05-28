@@ -2,48 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Setting;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class SettingController extends Controller
 {
     public function index()
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized action. Only system administrators can access settings.');
-        }
-
-        $setting = Setting::first();
-        return view('Pages.Settings.index', compact('setting'));
+        $user = Auth::user();
+        return view('Pages.Settings.index', compact('user'));
     }
 
     public function update(Request $request)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized action. Only system administrators can update settings.');
-        }
+        $user = Auth::user();
 
-        $setting = Setting::first();
-        
         $data = $request->validate([
-            'shop_name' => 'required|string|max:255',
-            'admin_name' => 'required|string|max:255',
-            'admin_email' => 'required|email|max:255',
+            'shop_name' => 'nullable|string|max:255',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
             'shop_logo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'admin_photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         if ($request->hasFile('shop_logo')) {
             $data['shop_logo'] = $request->file('shop_logo')->store('settings', 'cloudinary');
         }
 
-        if ($request->hasFile('admin_photo')) {
-            $data['admin_photo'] = $request->file('admin_photo')->store('settings', 'cloudinary');
+        if ($request->hasFile('photo')) {
+            $data['photo'] = $request->file('photo')->store('settings', 'cloudinary');
         }
 
-        $setting->update($data);
+        $user->update($data);
 
-        return back()->with('success', 'Settings updated successfully!');
+        return back()->with('success', 'Profile settings updated successfully!');
     }
 }
