@@ -22,7 +22,7 @@ use App\Http\Controllers\People\UserController;
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
-    Route::get('/register', function () { return redirect()->route('login'); });
+    Route::get('/register', function () { return redirect()->route('login'); })->name('register');
     Route::post('/register', function () { return redirect()->route('login'); });
 });
 

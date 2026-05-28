@@ -157,7 +157,7 @@
             <div class="mt-8 text-center border-t border-slate-800 pt-6">
                 <p class="text-xs text-slate-400 font-medium">
                     Don't have an account? 
-                    <a href="{{ route('register') }}" class="text-orange-500 font-bold hover:text-orange-400 transition-colors ml-1">Create Account</a>
+                    <span class="text-orange-500 font-bold ml-1">Contact your Administrator</span>
                 </p>
             </div>
         </div>
