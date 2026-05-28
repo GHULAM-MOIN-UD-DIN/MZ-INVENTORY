@@ -37,31 +37,7 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    public function showRegister()
-    {
-        return view('Pages.Auth.register');
-    }
 
-    public function register(Request $request)
-    {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', 'string', 'in:admin,cashier,manager'],
-        ]);
-
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'role' => $data['role'],
-        ]);
-
-        // Do not auto-login the user, redirect to login page instead
-        return redirect('/login')
-            ->with('success', 'Account created successfully! Please sign in with your credentials.');
-    }
 
     public function logout(Request $request)
     {
