@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ProductAddedMail;
 
 class ProductController extends Controller
 {
@@ -38,7 +42,24 @@ class ProductController extends Controller
             $data['image'] = $request->file('image')->store('products', 'cloudinary');
         }
 
-        Product::create($data);
+        $product = Product::create($data);
+        $product->load('category');
+
+        // Email notification to all staff & admin in this tenant
+        try {
+            $actor = Auth::user();
+            $adminId = $actor->admin_id ?? $actor->id;
+            $recipients = User::where('id', $adminId)
+                ->orWhere('admin_id', $adminId)
+                ->pluck('email')
+                ->toArray();
+
+            if (!empty($recipients)) {
+                Mail::to($recipients)->send(new ProductAddedMail($product, $actor));
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Product added email failed: ' . $e->getMessage());
+        }
 
         return redirect()->route('product.index')
             ->with('success','Product added successfully!');

@@ -3,8 +3,12 @@ namespace App\Http\Controllers\Sale;
 use App\Http\Controllers\Controller;
 use App\Models\Sale;
 use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CustomerInvoiceMail;
 
 class SaleController extends Controller
 {
@@ -43,6 +47,24 @@ class SaleController extends Controller
                     $product->decrement('quantity', $item['qty']);
                 }
             }
+        }
+
+        // Send invoice email to customer if they have an email
+        try {
+            $sale->load(['customer', 'items.product']);
+            if ($sale->customer && $sale->customer->email) {
+                $actor = Auth::user();
+                $adminId = $actor->admin_id ?? $actor->id;
+                $admin = User::find($adminId);
+                $shopName = $admin->shop_name ?? 'MZ Inventory Pro';
+                $adminEmail = $admin->email ?? config('mail.from.address');
+
+                Mail::to($sale->customer->email)->send(
+                    new CustomerInvoiceMail($sale, $shopName, $adminEmail)
+                );
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Sale invoice email failed: ' . $e->getMessage());
         }
 
         return redirect()->route('sale.index')->with('success', 'Sale created successfully!');

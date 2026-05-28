@@ -7,8 +7,12 @@ use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Sale;
 use App\Models\SaleItem;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CustomerInvoiceMail;
 
 class POSController extends Controller
 {
@@ -43,7 +47,7 @@ class POSController extends Controller
             'grand_total' => 'required|numeric'
         ]);
 
-        return DB::transaction(function() use ($request) {
+        $sale = DB::transaction(function() use ($request) {
             $ref = 'POS-' . strtoupper(uniqid());
             
             $sale = Sale::create([
@@ -78,12 +82,33 @@ class POSController extends Controller
                 }
             }
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Sale completed successfully!',
-                'sale_id' => $sale->id,
-                'invoice_url' => route('sale.invoice', $sale->id)
-            ]);
+            return $sale;
         });
+
+        // Send invoice email to customer if they have an email
+        try {
+            $sale->load(['customer', 'items.product']);
+            if ($sale->customer && $sale->customer->email) {
+                $actor = Auth::user();
+                $adminId = $actor->admin_id ?? $actor->id;
+                $admin = User::find($adminId);
+                $shopName = $admin->shop_name ?? 'MZ Inventory Pro';
+                $adminEmail = $admin->email ?? config('mail.from.address');
+
+                Mail::to($sale->customer->email)->send(
+                    new CustomerInvoiceMail($sale, $shopName, $adminEmail)
+                );
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Customer invoice email failed: ' . $e->getMessage());
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Sale completed successfully!',
+            'sale_id' => $sale->id,
+            'invoice_url' => route('sale.invoice', $sale->id)
+        ]);
     }
 }
+

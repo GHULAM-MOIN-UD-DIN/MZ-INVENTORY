@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\LoginAlertMail;
 
 class AuthController extends Controller
 {
@@ -27,6 +29,18 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
+
+            $user = Auth::user();
+            try {
+                Mail::to($user->email)->send(new LoginAlertMail(
+                    $user,
+                    $request->ip(),
+                    $request->userAgent(),
+                    now()->format('Y-m-d H:i:s')
+                ));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Login alert email failed: ' . $e->getMessage());
+            }
 
             return redirect()->intended('/')
                 ->with('success', 'Welcome back, ' . Auth::user()->name . '!');

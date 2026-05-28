@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeStaffMail;
 
 class UserController extends Controller
 {
@@ -30,7 +32,7 @@ class UserController extends Controller
             'role' => ['required', 'string', 'in:manager,cashier'],
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -40,6 +42,12 @@ class UserController extends Controller
             'shop_name' => Auth::user()->shop_name,
             'shop_logo' => Auth::user()->shop_logo,
         ]);
+
+        try {
+            Mail::to($user->email)->send(new WelcomeStaffMail($user, $data['password']));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Welcome staff email failed: ' . $e->getMessage());
+        }
 
         return redirect()->route('user.index')->with('success', 'Staff member created successfully!');
     }
