@@ -115,7 +115,7 @@
             --w-sidebar: 80px;
         }
 
-        .mini-sidebar #sidebar span, 
+        .mini-sidebar #sidebar .nav-link span, 
         .mini-sidebar #sidebar .sub-link,
         .mini-sidebar #sidebar p,
         .mini-sidebar #sidebar .flex-1.overflow-hidden {
@@ -363,16 +363,16 @@
                     </div>
                     <div class="flex-1 overflow-hidden">
                         <p class="text-sm font-bold truncate" title="{{ auth()->user()->name }}">{{ auth()->user()->name }}</p>
-                        <div class="flex items-center gap-2 mt-0.5">
-                            <span class="text-[10px] text-orange-500 font-bold uppercase tracking-tight">{{ auth()->user()->role === 'admin' ? 'Super Admin' : ucfirst(auth()->user()->role) }}</span>
-                            <span class="text-slate-300 dark:text-slate-700">&bull;</span>
-                            <form action="{{ route('logout') }}" method="POST" class="inline">
-                                @csrf
-                                <button type="submit" class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-tight hover:text-red-500 transition-colors">Logout</button>
-                            </form>
-                        </div>
+                        <p class="text-[10px] text-orange-500 font-bold uppercase tracking-tight mt-0.5">
+                            {{ auth()->user()->role === 'admin' ? 'Super Admin' : ucfirst(auth()->user()->role) }}
+                        </p>
                     </div>
-                    <div class="gps-dot"></div>
+                    <form action="{{ route('logout') }}" method="POST" class="inline-flex">
+                        @csrf
+                        <button type="submit" class="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-100 hover:bg-red-50 dark:bg-slate-800 dark:hover:bg-red-950/30 text-slate-400 hover:text-red-500 transition-all shadow-sm" title="Logout">
+                            <i class="fas fa-sign-out-alt text-xs"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -407,6 +407,13 @@
                     <i class="fas fa-bell"></i>
                     <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-orange-500 rounded-full border-2 border-white dark:border-slate-900"></span>
                 </button>
+
+                <form action="{{ route('logout') }}" method="POST" class="inline-flex">
+                    @csrf
+                    <button type="submit" class="w-10 h-10 rounded-xl flex items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 transition-all hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400" title="Logout">
+                        <i class="fas fa-power-off"></i>
+                    </button>
+                </form>
 
                 <div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1"></div>
                 

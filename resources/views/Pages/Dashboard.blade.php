@@ -5,7 +5,8 @@
 @section('content')
     @if(auth()->user()->role === 'cashier')
         <!-- Cashier Dashboard -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="flex flex-col gap-6 lg:gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Welcome and POS action card -->
             <div class="md:col-span-3 premium-card p-8 bg-gradient-to-tr from-orange-600 to-orange-400 text-white relative overflow-hidden group">
                 <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
@@ -108,9 +109,12 @@
                 </table>
             </div>
         </div>
+    </div>
     @else
-        <!-- Quick Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Admin & Manager Dashboard -->
+        <div class="flex flex-col gap-6 lg:gap-8">
+            <!-- Quick Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Total Sales -->
             <div class="premium-card p-6 stagger-1 relative overflow-hidden group">
                 <div class="absolute -right-4 -top-4 w-24 h-24 bg-orange-500/5 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
@@ -308,8 +312,8 @@
                 </div>
             </div>
         </div>
-    @endif
-</div>
+    </div>
+@endif
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
