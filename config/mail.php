@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'log'),
+    'default' => (env('RENDER') === 'true' && env('MAIL_MAILER', 'smtp') === 'smtp') ? 'brevo' : env('MAIL_MAILER', 'log'),
 
     /*
     |--------------------------------------------------------------------------
@@ -47,6 +47,11 @@ return [
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url((string) env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
+        ],
+
+        'brevo' => [
+            'transport' => 'brevo-api',
+            'key' => env('BREVO_API_KEY', env('MAIL_PASSWORD')),
         ],
 
         'ses' => [
