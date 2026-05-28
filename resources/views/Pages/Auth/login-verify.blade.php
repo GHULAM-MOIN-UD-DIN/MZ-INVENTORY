@@ -151,10 +151,16 @@
             Swal.fire({ icon: 'success', title: 'Code Sent!', text: "{{ session('status') }}", confirmButtonColor: '#f97316', background: '#0f172a', color: '#f8fafc' });
         @endif
         @if($errors->any())
+            let errorHtml = '<ul class="text-left text-xs space-y-1">';
+            @foreach($errors->all() as $error)
+                errorHtml += '<li><i class="fas fa-exclamation-circle text-orange-500 mr-2"></i>' + @json($error) + '</li>';
+            @endforeach
+            errorHtml += '</ul>';
+
             Swal.fire({ 
                 icon: 'error', 
                 title: 'Verification Failed', 
-                html: '<ul class="text-left text-xs space-y-1">@foreach($errors->all() as $error)<li><i class="fas fa-exclamation-circle text-orange-500 mr-2"></i>{{ $error }}</li>@endforeach</ul>', 
+                html: errorHtml, 
                 confirmButtonColor: '#f97316',
                 background: '#0f172a',
                 color: '#f8fafc'
