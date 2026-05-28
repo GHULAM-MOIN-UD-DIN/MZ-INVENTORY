@@ -47,7 +47,7 @@ class ForgotPasswordController extends Controller
             Mail::to($email)->send(new SendOtpMail($code, 'forgot_password'));
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Forgot password OTP email failed: ' . $e->getMessage());
-            return back()->withErrors(['email' => 'Failed to send verification code email. Please check SMTP settings.']);
+            return back()->withErrors(['email' => 'Failed to send verification code email: ' . $e->getMessage()]);
         }
 
         // Save email in session

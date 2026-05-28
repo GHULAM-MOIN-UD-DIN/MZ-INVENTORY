@@ -16,7 +16,7 @@ class BrevoApiTransport implements TransportInterface
     protected $fromEmail;
     protected $fromName;
 
-    public function __construct(string $apiKey, string $fromEmail, string $fromName)
+    public function __construct(?string $apiKey, ?string $fromEmail, ?string $fromName)
     {
         $this->apiKey = $apiKey;
         $this->fromEmail = $fromEmail;
@@ -25,6 +25,14 @@ class BrevoApiTransport implements TransportInterface
 
     public function send(RawMessage $message, Envelope $envelope = null): ?SentMessage
     {
+        if (empty($this->apiKey)) {
+            throw new \Exception('Brevo API Key is missing. Please set MAIL_PASSWORD or BREVO_API_KEY in Render environment variables.');
+        }
+
+        if (empty($this->fromEmail)) {
+            throw new \Exception('Sender email is missing. Please set MAIL_FROM_ADDRESS in Render environment variables.');
+        }
+
         if (!$message instanceof Email) {
             return null;
         }

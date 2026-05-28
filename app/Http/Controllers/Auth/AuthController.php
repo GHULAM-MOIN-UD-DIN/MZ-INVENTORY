@@ -53,7 +53,7 @@ class AuthController extends Controller
             } catch (\Exception $e) {
                 \Illuminate\Support\Facades\Log::error('Login 2FA OTP email failed: ' . $e->getMessage());
                 return back()->withErrors([
-                    'email' => 'Failed to send verification code. Please check SMTP settings.',
+                    'email' => 'Failed to send verification code: ' . $e->getMessage(),
                 ]);
             }
 
