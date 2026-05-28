@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'default' => (env('RENDER') === 'true' && env('MAIL_MAILER', 'smtp') === 'smtp') ? 'brevo' : env('MAIL_MAILER', 'log'),
+    'default' => (env('RENDER') && env('MAIL_MAILER', 'smtp') === 'smtp') ? 'brevo' : env('MAIL_MAILER', 'log'),
 
     /*
     |--------------------------------------------------------------------------
