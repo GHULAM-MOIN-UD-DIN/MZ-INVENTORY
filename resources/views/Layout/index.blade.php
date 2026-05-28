@@ -339,15 +339,22 @@
             <div class="p-6 border-t border-slate-100 dark:border-slate-800">
                 <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800">
                     <div class="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center text-white font-bold shadow-md shadow-orange-500/20 overflow-hidden">
-                        @if($settings && $settings->admin_photo)
-                            <img src="{{ ($settings && $settings->admin_photo) ? cloudinary_url($settings->admin_photo) : 'https://api.dicebear.com/7.x/avataaars/svg?seed=' . ($settings->admin_name ?? 'Admin') }}" class="w-full h-full object-cover">
+                        @if(auth()->user()->role === 'admin' && $settings && $settings->admin_photo)
+                            <img src="{{ cloudinary_url($settings->admin_photo) }}" class="w-full h-full object-cover">
                         @else
-                            {{ substr($settings->admin_name ?? 'Admin', 0, 2) }}
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ urlencode(auth()->user()->name) }}" class="w-full h-full object-cover">
                         @endif
                     </div>
                     <div class="flex-1 overflow-hidden">
-                        <p class="text-sm font-bold truncate">{{ $settings->admin_name ?? 'Maz Admin' }}</p>
-                        <p class="text-[10px] text-orange-500 font-bold uppercase tracking-tight">Super Admin</p>
+                        <p class="text-sm font-bold truncate" title="{{ auth()->user()->name }}">{{ auth()->user()->name }}</p>
+                        <div class="flex items-center gap-2 mt-0.5">
+                            <span class="text-[10px] text-orange-500 font-bold uppercase tracking-tight">{{ auth()->user()->role === 'admin' ? 'Super Admin' : ucfirst(auth()->user()->role) }}</span>
+                            <span class="text-slate-300 dark:text-slate-700">&bull;</span>
+                            <form action="{{ route('logout') }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-tight hover:text-red-500 transition-colors">Logout</button>
+                            </form>
+                        </div>
                     </div>
                     <div class="gps-dot"></div>
                 </div>
@@ -389,14 +396,14 @@
                 
                 <div class="flex items-center gap-3 cursor-pointer group" onclick="window.location.href='{{ route('setting.index') }}'">
                     <div class="hidden text-right lg:block">
-                        <p class="text-xs font-bold leading-none">{{ $settings->admin_name ?? 'Maz Admin' }}</p>
-                        <p class="text-[10px] text-slate-400 mt-1">{{ $settings->admin_email ?? 'admin@example.com' }}</p>
+                        <p class="text-xs font-bold leading-none">{{ auth()->user()->name }}</p>
+                        <p class="text-[10px] text-slate-400 mt-1">{{ auth()->user()->email }}</p>
                     </div>
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-800 border-2 border-white dark:border-slate-800 overflow-hidden shadow-sm">
-                        @if($settings && $settings->admin_photo)
-                            <img src="{{ ($settings && $settings->admin_photo) ? cloudinary_url($settings->admin_photo) : 'https://api.dicebear.com/7.x/avataaars/svg?seed=' . ($settings->admin_name ?? 'Admin') }}" class="w-full h-full object-cover">
+                        @if(auth()->user()->role === 'admin' && $settings && $settings->admin_photo)
+                            <img src="{{ cloudinary_url($settings->admin_photo) }}" class="w-full h-full object-cover">
                         @else
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ $settings->admin_name ?? 'Admin' }}" alt="User">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ urlencode(auth()->user()->name) }}" class="w-full h-full object-cover">
                         @endif
                     </div>
                 </div>

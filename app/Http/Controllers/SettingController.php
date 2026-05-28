@@ -10,12 +10,20 @@ class SettingController extends Controller
 {
     public function index()
     {
+        if (auth()->user()->role !== 'admin') {
+            abort(403, 'Unauthorized action. Only system administrators can access settings.');
+        }
+
         $setting = Setting::first();
         return view('Pages.Settings.index', compact('setting'));
     }
 
     public function update(Request $request)
     {
+        if (auth()->user()->role !== 'admin') {
+            abort(403, 'Unauthorized action. Only system administrators can update settings.');
+        }
+
         $setting = Setting::first();
         
         $data = $request->validate([
