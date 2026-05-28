@@ -16,12 +16,26 @@ use App\Http\Controllers\People\SupplierController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\People\UserController;
 
 // Guest Authentication Routes
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
+
+    // Login 2-Step Verification Routes
+    Route::get('/login/verify', [AuthController::class, 'showVerify2Fa'])->name('login.verify');
+    Route::post('/login/verify', [AuthController::class, 'verify2Fa']);
+
+    // Forgot Password with 2-Step Verification Routes
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetOtp'])->name('password.email');
+    Route::get('/forgot-password/verify', [ForgotPasswordController::class, 'showVerifyForm'])->name('password.verify');
+    Route::post('/forgot-password/verify', [ForgotPasswordController::class, 'verifyOtp']);
+    Route::get('/reset-password', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
+
     Route::get('/register', function () { return redirect()->route('login'); })->name('register');
     Route::post('/register', function () { return redirect()->route('login'); });
 });

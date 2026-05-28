@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | MZ Inventory Pro</title>
+    <title>Verify Code | MZ Inventory Pro</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -72,6 +72,11 @@
             box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
             outline: none;
         }
+        .otp-letter-spacing {
+            letter-spacing: 0.5em;
+            text-align: center;
+            padding-left: 0.5em;
+        }
     </style>
 </head>
 
@@ -82,7 +87,7 @@
     <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-brand-800/20 rounded-full filter blur-[120px] animate-pulse-slow" style="animation-delay: 4s;"></div>
     <div class="absolute top-1/2 left-1/3 w-80 h-80 bg-orange-500/10 rounded-full filter blur-[100px] animate-pulse-slow" style="animation-delay: 2s;"></div>
 
-    <!-- Login Container -->
+    <!-- Container -->
     <div class="w-full max-w-[460px] relative z-10 animate-slide-up">
         
         <!-- Brand identity logo -->
@@ -93,7 +98,7 @@
             <h1 class="font-display font-black text-2xl tracking-tight leading-none text-white">
                 MZ <span class="text-orange-500">Inventory</span>
             </h1>
-            <p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-[0.25em] font-bold mt-2">Sign in to control dashboard</p>
+            <p class="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-[0.25em] font-bold mt-2">Security checkpoint</p>
         </div>
 
         <!-- Glassmorphic Form Card -->
@@ -102,63 +107,34 @@
             <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-orange-500 to-orange-600"></div>
 
             <div class="mb-8">
-                <h2 class="text-xl font-bold text-white">Welcome Back!</h2>
-                <p class="text-xs text-slate-400 mt-1">Please enter your credentials to login.</p>
+                <h2 class="text-xl font-bold text-white">Verify Your Email</h2>
+                <p class="text-xs text-slate-400 mt-1">We've sent a 6-digit OTP code to <strong class="text-orange-500">{{ session('forgot_password_email') }}</strong>. Enter it below to proceed.</p>
             </div>
 
-            <!-- Login Form -->
-            <form action="{{ route('login') }}" method="POST" class="space-y-6">
+            <!-- OTP Verification Form -->
+            <form action="{{ url('/forgot-password/verify') }}" method="POST" class="space-y-6">
                 @csrf
 
-                <!-- Email Input -->
+                <!-- OTP Input -->
                 <div class="space-y-2">
-                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Email Address</label>
-                    <div class="relative group">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400 group-focus-within:text-orange-500 transition-colors">
-                            <i class="fas fa-envelope"></i>
-                        </span>
-                        <input type="email" name="email" value="{{ old('email') }}" required placeholder="your.name@example.com"
-                               class="form-input-premium w-full pl-11 pr-4 py-3.5 rounded-xl text-sm text-white placeholder-slate-500">
+                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider text-center">6-Digit Code</label>
+                    <div class="relative group max-w-[280px] mx-auto">
+                        <input type="text" name="code" required maxlength="6" autofocus autocomplete="one-time-code" placeholder="000000"
+                               class="form-input-premium w-full py-4 rounded-xl text-2xl text-white font-extrabold otp-letter-spacing uppercase">
                     </div>
-                </div>
-
-                <!-- Password Input -->
-                <div class="space-y-2">
-                    <div class="flex items-center justify-between">
-                        <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Password</label>
-                    </div>
-                    <div class="relative group">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400 group-focus-within:text-orange-500 transition-colors">
-                            <i class="fas fa-lock"></i>
-                        </span>
-                        <input type="password" name="password" id="password_input" required placeholder="••••••••"
-                               class="form-input-premium w-full pl-11 pr-12 py-3.5 rounded-xl text-sm text-white placeholder-slate-500">
-                        <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-white transition-colors">
-                            <i class="fas fa-eye" id="password_eye"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Remember Me & Reset Password -->
-                <div class="flex items-center justify-between text-xs font-medium">
-                    <label class="flex items-center gap-2 cursor-pointer select-none text-slate-300">
-                        <input type="checkbox" name="remember" class="w-4 h-4 rounded border-slate-700 bg-slate-800 text-orange-500 focus:ring-orange-500/20">
-                        <span>Remember me</span>
-                    </label>
-                    <a href="{{ route('password.request') }}" class="text-orange-500 hover:text-orange-400 transition-colors font-bold">Forgot Password?</a>
                 </div>
 
                 <!-- Submit Button -->
                 <button type="submit" class="w-full py-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl shadow-lg shadow-orange-500/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2">
-                    <i class="fas fa-sign-in-alt"></i> Sign In to Account
+                    <i class="fas fa-shield-halved"></i> Verify Code
                 </button>
             </form>
 
-            <!-- Registration Redirect Link -->
+            <!-- Resend/Cancel Redirect Link -->
             <div class="mt-8 text-center border-t border-slate-800 pt-6">
                 <p class="text-xs text-slate-400 font-medium">
-                    Don't have an account? 
-                    <span class="text-orange-500 font-bold ml-1">Contact your Administrator</span>
+                    Did not receive code? 
+                    <a href="{{ route('password.request') }}" class="text-orange-500 font-bold ml-1 hover:text-orange-400 transition-colors">Request New Code</a>
                 </p>
             </div>
         </div>
@@ -167,30 +143,15 @@
         <p class="text-center text-[10px] text-slate-500 uppercase tracking-widest mt-8 font-bold">&copy; 2026 MZ Inventory Pro &bull; All Rights Reserved</p>
     </div>
 
-    <!-- Password visibility script -->
-    <script>
-        function togglePasswordVisibility() {
-            const input = document.getElementById('password_input');
-            const eye = document.getElementById('password_eye');
-            if (input.type === 'password') {
-                input.type = 'text';
-                eye.classList.replace('fa-eye', 'fa-eye-slash');
-            } else {
-                input.type = 'password';
-                eye.classList.replace('fa-eye-slash', 'fa-eye');
-            }
-        }
-    </script>
-
     <!-- SweetAlert notifications -->
     <script>
-        @if(session('success'))
-            Swal.fire({ icon: 'success', title: 'Success!', text: "{{ session('success') }}", confirmButtonColor: '#f97316', background: '#0f172a', color: '#f8fafc' });
+        @if(session('status'))
+            Swal.fire({ icon: 'success', title: 'Code Sent!', text: "{{ session('status') }}", confirmButtonColor: '#f97316', background: '#0f172a', color: '#f8fafc' });
         @endif
         @if($errors->any())
             Swal.fire({ 
                 icon: 'error', 
-                title: 'Access Denied', 
+                title: 'Verification Failed', 
                 html: '<ul class="text-left text-xs space-y-1">@foreach($errors->all() as $error)<li><i class="fas fa-exclamation-circle text-orange-500 mr-2"></i>{{ $error }}</li>@endforeach</ul>', 
                 confirmButtonColor: '#f97316',
                 background: '#0f172a',
