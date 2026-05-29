@@ -39,7 +39,7 @@ class ForgotPasswordController extends Controller
             'email' => $email,
             'code' => $code,
             'type' => 'forgot_password',
-            'expires_at' => now()->addMinutes(15),
+            'expires_at' => now()->addMinutes(5),
         ]);
 
         // Send Email

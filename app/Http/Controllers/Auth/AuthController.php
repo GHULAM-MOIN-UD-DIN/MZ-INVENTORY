@@ -44,7 +44,7 @@ class AuthController extends Controller
                 'email' => $user->email,
                 'code' => $code,
                 'type' => 'login_2fa',
-                'expires_at' => now()->addMinutes(10),
+                'expires_at' => now()->addMinutes(5),
             ]);
 
             // Send SMTP Email

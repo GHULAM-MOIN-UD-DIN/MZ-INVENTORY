@@ -109,6 +109,11 @@
             <div class="mb-8">
                 <h2 class="text-xl font-bold text-white">2-Step Verification</h2>
                 <p class="text-xs text-slate-400 mt-1">We've sent a 6-digit verification code to <strong class="text-orange-500">{{ session('login_2fa_email') }}</strong>. Please enter it to authorize your session.</p>
+                <div class="mt-4 flex items-center justify-center gap-2 bg-slate-900/50 rounded-2xl py-2 px-4 border border-slate-800/80 max-w-[180px] mx-auto">
+                    <i class="far fa-clock text-orange-500 animate-pulse text-xs"></i>
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Expires in:</span>
+                    <span id="countdown" class="text-xs font-black text-orange-500">05:00</span>
+                </div>
             </div>
 
             <!-- OTP Login Form -->
@@ -145,7 +150,7 @@
         <p class="text-center text-[10px] text-slate-500 uppercase tracking-widest mt-8 font-bold">&copy; 2026 MZ Inventory Pro &bull; All Rights Reserved</p>
     </div>
 
-    <!-- SweetAlert notifications -->
+    <!-- SweetAlert notifications & Countdown Timer -->
     <script>
         @if(session('status'))
             Swal.fire({ icon: 'success', title: 'Code Sent!', text: "{{ session('status') }}", confirmButtonColor: '#f97316', background: '#0f172a', color: '#f8fafc' });
@@ -166,6 +171,38 @@
                 color: '#f8fafc'
             });
         @endif
+
+        // Countdown Timer Logic
+        let timeLeft = 300; // 5 minutes in seconds
+        const countdownEl = document.getElementById('countdown');
+        const timerInterval = setInterval(() => {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            
+            countdownEl.textContent = `${minutes}:${seconds}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                countdownEl.textContent = 'EXPIRED';
+                countdownEl.classList.remove('text-orange-500');
+                countdownEl.classList.add('text-red-500');
+                
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Code Expired',
+                    text: 'Your verification code has expired. Please try logging in again to send a new code.',
+                    confirmButtonColor: '#f97316',
+                    background: '#0f172a',
+                    color: '#f8fafc'
+                }).then(() => {
+                    window.location.href = "{{ route('login') }}";
+                });
+            }
+            timeLeft--;
+        }, 1000);
     </script>
 </body>
 </html>

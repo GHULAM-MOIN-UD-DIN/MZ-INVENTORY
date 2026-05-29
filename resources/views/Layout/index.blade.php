@@ -216,6 +216,56 @@
             background: var(--bg-card);
             box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
         }
+
+        /* Custom Premium SweetAlert styles matching the dark/light theme */
+        .swal2-popup {
+            border-radius: 24px !important;
+            font-family: 'Outfit', sans-serif !important;
+            background-color: var(--bg-card) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid var(--border-color) !important;
+            box-shadow: var(--shadow-premium) !important;
+            padding: 2.5rem 2rem !important;
+        }
+        .swal2-title {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            color: var(--text-primary) !important;
+            font-weight: 800 !important;
+            font-size: 1.5rem !important;
+        }
+        .swal2-html-container {
+            color: var(--text-secondary) !important;
+            font-size: 0.875rem !important;
+            line-height: 1.5 !important;
+            font-weight: 500 !important;
+        }
+        .swal2-confirm {
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary)) !important;
+            border-radius: 14px !important;
+            padding: 0.85rem 2rem !important;
+            font-weight: 700 !important;
+            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.25) !important;
+            border: none !important;
+            transition: all 0.3s ease !important;
+        }
+        .swal2-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(249, 115, 22, 0.35) !important;
+        }
+        .swal2-cancel {
+            border-radius: 14px !important;
+            padding: 0.85rem 2rem !important;
+            font-weight: 700 !important;
+            background-color: #ef4444 !important;
+            border: none !important;
+        }
+        .swal2-icon {
+            border-width: 3px !important;
+            margin: 0 auto 1.5rem auto !important;
+        }
+        .swal2-success-circular-line, .swal2-success-fix, .swal2-timer-progress-bar {
+            background-color: transparent !important;
+        }
     </style>
     @stack('styles')
 </head>
@@ -494,14 +544,19 @@
     </script>
     <script>
         @if(session('success'))
-            Swal.fire({ icon: 'success', title: 'Success!', text: "{{ session('success') }}", confirmButtonColor: '#f97316' });
+            Swal.fire({ 
+                icon: 'success', 
+                title: 'Success!', 
+                text: "{{ session('success') }}", 
+                timer: 4000,
+                timerProgressBar: true
+            });
         @endif
         @if($errors->any())
             Swal.fire({ 
                 icon: 'error', 
                 title: 'Validation Error', 
-                html: '<ul class="text-left">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>', 
-                confirmButtonColor: '#f97316' 
+                html: '<ul class="text-left space-y-1">@foreach($errors->all() as $error)<li><i class="fas fa-exclamation-circle text-orange-500 mr-2"></i>{{ $error }}</li>@endforeach</ul>'
             });
         @endif
     </script>
