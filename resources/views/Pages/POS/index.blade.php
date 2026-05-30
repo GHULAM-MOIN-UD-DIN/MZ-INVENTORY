@@ -66,7 +66,7 @@
                 <div class="flex-1">
                     <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest block mb-1">Customer</label>
                     <select id="posCustomer" class="w-full py-1 bg-transparent font-bold text-xs border-none focus:ring-0">
-                        <option value="1">Walk-in Customer</option>
+                        <option value="">Walk-in Customer</option>
                         @foreach($customers as $c)
                             <option value="{{ $c->id }}">{{ $c->name }}</option>
                         @endforeach
@@ -234,8 +234,7 @@
     function calculateTotals() {
         const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
         const discount = parseFloat(document.getElementById('posDiscount').value) || 0;
-        const serviceCharge = 1.00;
-        const total = Math.max(0, subtotal - discount + serviceCharge);
+        const total = Math.max(0, subtotal - discount);
 
         const cashReceived = parseFloat(document.getElementById('cashReceived').value) || 0;
         const change = Math.max(0, cashReceived - total);
@@ -253,8 +252,7 @@
         
         const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
         const discount = parseFloat(document.getElementById('posDiscount').value) || 0;
-        const serviceCharge = 1.00;
-        const total = Math.max(0, subtotal - discount + serviceCharge);
+        const total = Math.max(0, subtotal - discount);
         const cashReceived = parseFloat(document.getElementById('cashReceived').value) || 0;
 
         if (document.getElementById('posPaymentMethod').value === 'Cash' && cashReceived < total) {
@@ -262,15 +260,15 @@
             return;
         }
 
+        const customerVal = document.getElementById('posCustomer').value;
         const data = {
-            customer_id: document.getElementById('posCustomer').value,
+            customer_id: customerVal || null,
             payment_method: document.getElementById('posPaymentMethod').value,
             items: cart.map(item => ({ id: item.id, qty: item.qty, price: item.price })),
             discount: discount,
             grand_total: total,
             cash_received: cashReceived,
             change_return: Math.max(0, cashReceived - total),
-            service_charge: serviceCharge,
             _token: '{{ csrf_token() }}'
         };
 

@@ -32,8 +32,12 @@
                         <tr class="group hover:bg-orange-500/5 transition-colors">
                             <td class="py-4 px-8">
                                 <div class="flex items-center gap-4">
-                                    <div class="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500">
-                                        <i class="fas fa-tags text-sm"></i>
+                                    <div class="w-10 h-10 rounded-xl overflow-hidden bg-orange-500/10 flex items-center justify-center text-orange-500">
+                                        @if($category->image)
+                                            <img src="{{ cloudinary_url($category->image) }}" class="w-full h-full object-cover" alt="{{ $category->name }}">
+                                        @else
+                                            <i class="fas fa-tags text-sm"></i>
+                                        @endif
                                     </div>
                                     <div>
                                         <p class="text-sm font-bold">{{ $category->name }}</p>

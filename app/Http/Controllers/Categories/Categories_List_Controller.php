@@ -10,7 +10,7 @@ class Categories_List_Controller extends Controller
 {
     public function index()
     {
-        $categories = Category::latest()->paginate(10);
+        $categories = Category::withCount('products')->latest()->paginate(10);
         return view('Pages.Categories.List_Categories', compact('categories'));
     }
 }

@@ -42,7 +42,7 @@ class POSController extends Controller
     public function checkout(Request $request)
     {
         $request->validate([
-            'customer_id' => 'required',
+            'customer_id' => 'nullable',
             'items' => 'required|array',
             'grand_total' => 'required|numeric'
         ]);
@@ -52,14 +52,14 @@ class POSController extends Controller
             
             $sale = Sale::create([
                 'reference' => $ref,
-                'customer_id' => $request->customer_id,
+                'customer_id' => $request->customer_id ?: null,
                 'date' => now(),
                 'status' => 'Completed',
                 'payment_status' => $request->payment_status ?? 'Paid',
                 'grand_total' => $request->grand_total,
                 'cash_received' => $request->cash_received ?? 0,
                 'change_return' => $request->change_return ?? 0,
-                'service_charge' => 1.00, // Fixed 1 Rupee service charge
+                'service_charge' => $request->service_charge ?? 0,
                 'discount' => $request->discount ?? 0,
                 'tax' => $request->tax ?? 0,
                 'payment_method' => $request->payment_method ?? 'Cash',
