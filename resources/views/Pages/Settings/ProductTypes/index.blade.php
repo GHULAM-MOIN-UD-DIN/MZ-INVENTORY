@@ -23,7 +23,6 @@
                 <thead>
                     <tr class="bg-slate-50/50 dark:bg-slate-900/50">
                         <th class="py-4 px-8 text-xs font-bold uppercase tracking-widest text-slate-400">Type Name</th>
-                        <th class="py-4 px-8 text-xs font-bold uppercase tracking-widest text-slate-400 text-center">Total Products</th>
                         <th class="py-4 px-8 text-xs font-bold uppercase tracking-widest text-slate-400 text-right">Actions</th>
                     </tr>
                 </thead>
@@ -39,11 +38,6 @@
                                         <p class="text-sm font-bold">{{ $type->name }}</p>
                                     </div>
                                 </div>
-                            </td>
-                            <td class="py-4 px-8 text-center">
-                                <span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-extrabold text-orange-500">
-                                    {{ $type->products_count ?? 0 }} Items
-                                </span>
                             </td>
                             <td class="py-4 px-8 text-right">
                                 <div class="flex items-center justify-end gap-2">

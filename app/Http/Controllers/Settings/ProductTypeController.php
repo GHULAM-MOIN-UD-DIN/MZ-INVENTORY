@@ -10,7 +10,7 @@ class ProductTypeController extends Controller
 {
     public function index()
     {
-        $productTypes = ProductType::withCount('products')->latest()->paginate(10);
+        $productTypes = ProductType::latest()->paginate(10);
         return view('Pages.Settings.ProductTypes.index', compact('productTypes'));
     }
 
