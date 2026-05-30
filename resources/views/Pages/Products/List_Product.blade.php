@@ -91,7 +91,11 @@
                             </td>
                             <td class="py-4 px-6 text-right">
                                 <div class="flex items-center justify-end gap-1.5">
-                                    <button onclick="printBarcode('{{ $product->code }}', '{{ $product->name }}', '{{ number_format($product->price, 2) }}', '{{ $product->barcode_symbology }}')" 
+                                    <button onclick="printBarcode(this)" 
+                                            data-code="{{ $product->code }}"
+                                            data-name="{{ $product->name }}"
+                                            data-price="{{ number_format($product->price, 2) }}"
+                                            data-symbology="{{ $product->barcode_symbology }}"
                                             class="w-7 h-7 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all"
                                             title="Print Barcode">
                                         <i class="fas fa-barcode text-[10px]"></i>
@@ -149,7 +153,12 @@
 </div>
 
 <script>
-    function printBarcode(code, name, price, symbology) {
+    function printBarcode(btn) {
+        const code = btn.getAttribute('data-code');
+        const name = btn.getAttribute('data-name');
+        const price = btn.getAttribute('data-price');
+        const symbology = btn.getAttribute('data-symbology');
+
         document.getElementById('barcodeProductName').textContent = name;
         document.getElementById('barcodePrice').textContent = 'Rs. ' + price;
         
