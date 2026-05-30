@@ -17,7 +17,18 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('Pages.Products.Add_Products', compact('categories'));
+        $productTypes = ['Standard', 'Combo', 'Digital', 'Service'];
+        $barcodeSymbologies = [
+            'C128' => 'Code 128',
+            'C39' => 'Code 39',
+            'EAN8' => 'EAN 8',
+            'EAN13' => 'EAN 13',
+            'UPCA' => 'UPC-A',
+            'UPCE' => 'UPC-E'
+        ];
+        $taxMethods = ['Exclusive', 'Inclusive'];
+        
+        return view('Pages.Products.Add_Products', compact('categories', 'productTypes', 'barcodeSymbologies', 'taxMethods'));
     }
 
     // Store Product
@@ -75,8 +86,18 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $categories = Category::all();
+        $productTypes = ['Standard', 'Combo', 'Digital', 'Service'];
+        $barcodeSymbologies = [
+            'C128' => 'Code 128',
+            'C39' => 'Code 39',
+            'EAN8' => 'EAN 8',
+            'EAN13' => 'EAN 13',
+            'UPCA' => 'UPC-A',
+            'UPCE' => 'UPC-E'
+        ];
+        $taxMethods = ['Exclusive', 'Inclusive'];
 
-        return view('Pages.Products.Update_product', compact('product','categories'));
+        return view('Pages.Products.Update_product', compact('product', 'categories', 'productTypes', 'barcodeSymbologies', 'taxMethods'));
     }
 
     // Update Product

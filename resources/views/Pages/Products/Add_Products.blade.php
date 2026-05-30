@@ -93,10 +93,11 @@
                                            focus:border-orange-500 focus:bg-white dark:focus:bg-slate-900 
                                            focus:ring-4 focus:ring-orange-500/10 transition-all duration-300
                                            appearance-none cursor-pointer" required>
-                                <option value="Standard" class="bg-white dark:bg-slate-800">📦 Standard</option>
-                                <option value="Combo" class="bg-white dark:bg-slate-800">🎁 Combo</option>
-                                <option value="Digital" class="bg-white dark:bg-slate-800">💻 Digital</option>
-                                <option value="Service" class="bg-white dark:bg-slate-800">🔧 Service</option>
+                                @foreach($productTypes as $type)
+                                    <option value="{{ $type }}" class="bg-white dark:bg-slate-800">
+                                        {{ $type === 'Standard' ? '📦 ' : ($type === 'Combo' ? '🎁 ' : ($type === 'Digital' ? '💻 ' : '🔧 ')) }}{{ $type }}
+                                    </option>
+                                @endforeach
                             </select>
                             <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
                                 <i class="fas fa-chevron-down text-slate-400 text-xs"></i>
@@ -143,12 +144,9 @@
                                            focus:border-orange-500 focus:bg-white dark:focus:bg-slate-900 
                                            focus:ring-4 focus:ring-orange-500/10 transition-all duration-300
                                            appearance-none cursor-pointer" required>
-                                <option value="C128" selected class="bg-white dark:bg-slate-800">Code 128</option>
-                                <option value="C39" class="bg-white dark:bg-slate-800">Code 39</option>
-                                <option value="EAN8" class="bg-white dark:bg-slate-800">EAN 8</option>
-                                <option value="EAN13" class="bg-white dark:bg-slate-800">EAN 13</option>
-                                <option value="UPCA" class="bg-white dark:bg-slate-800">UPC-A</option>
-                                <option value="UPCE" class="bg-white dark:bg-slate-800">UPC-E</option>
+                                @foreach($barcodeSymbologies as $key => $label)
+                                    <option value="{{ $key }}" class="bg-white dark:bg-slate-800">{{ $label }}</option>
+                                @endforeach
                             </select>
                             <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
                                 <i class="fas fa-barcode text-slate-400 text-xs"></i>
@@ -226,8 +224,9 @@
                                            focus:border-orange-500 focus:bg-white dark:focus:bg-slate-900 
                                            focus:ring-4 focus:ring-orange-500/10 transition-all duration-300
                                            appearance-none cursor-pointer" required>
-                                <option value="Exclusive" selected class="bg-white dark:bg-slate-800">Exclusive</option>
-                                <option value="Inclusive" class="bg-white dark:bg-slate-800">Inclusive</option>
+                                @foreach($taxMethods as $method)
+                                    <option value="{{ $method }}" class="bg-white dark:bg-slate-800">{{ $method }}</option>
+                                @endforeach
                             </select>
                             <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
                                 <i class="fas fa-percent text-slate-400 text-xs"></i>

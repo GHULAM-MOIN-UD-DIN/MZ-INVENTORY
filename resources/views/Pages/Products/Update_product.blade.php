@@ -62,6 +62,17 @@
                     </div>
 
                     <div class="form-group group">
+                        <label class="form-label">Product Type *</label>
+                        <select name="type" class="form-input appearance-none" required>
+                            @foreach($productTypes as $type)
+                                <option value="{{ $type }}" {{ $product->type == $type ? 'selected' : '' }}>
+                                    {{ $type === 'Standard' ? '📦 ' : ($type === 'Combo' ? '🎁 ' : ($type === 'Digital' ? '💻 ' : '🔧 ')) }}{{ $type }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group group">
                         <label class="form-label">Category *</label>
                         <select name="category_id" class="form-input appearance-none" required>
                             @foreach($categories as $category)
@@ -73,27 +84,23 @@
                     <div class="form-group group">
                         <label class="form-label">Barcode Symbology *</label>
                         <select name="barcode_symbology" class="form-input appearance-none" required>
-                            <option value="CODE128" {{ $product->barcode_symbology == 'CODE128' ? 'selected' : '' }}>CODE128</option>
-                            <option value="CODE39" {{ $product->barcode_symbology == 'CODE39' ? 'selected' : '' }}>CODE39</option>
-                            <option value="EAN8" {{ $product->barcode_symbology == 'EAN8' ? 'selected' : '' }}>EAN8</option>
-                            <option value="EAN13" {{ $product->barcode_symbology == 'EAN13' ? 'selected' : '' }}>EAN13</option>
-                            <option value="UPCA" {{ $product->barcode_symbology == 'UPCA' ? 'selected' : '' }}>UPC-A</option>
-                            <option value="UPCE" {{ $product->barcode_symbology == 'UPCE' ? 'selected' : '' }}>UPC-E</option>
+                            @foreach($barcodeSymbologies as $key => $label)
+                                <option value="{{ $key }}" {{ $product->barcode_symbology == $key ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
                         </select>
                     </div>
 
                     <div class="form-group group">
                         <label class="form-label">Tax Method *</label>
                         <select name="tax_method" class="form-input appearance-none" required>
-                            <option value="Exclusive" {{ $product->tax_method == 'Exclusive' ? 'selected' : '' }}>Exclusive</option>
-                            <option value="Inclusive" {{ $product->tax_method == 'Inclusive' ? 'selected' : '' }}>Inclusive</option>
+                            @foreach($taxMethods as $method)
+                                <option value="{{ $method }}" {{ $product->tax_method == $method ? 'selected' : '' }}>{{ $method }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
-                    <input type="hidden" name="type" value="Standard">
-                    
                     <div class="form-group group">
                         <label class="form-label">Cost Price *</label>
                         <div class="relative">

@@ -33,6 +33,7 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4" id="productsGrid">
                 @forelse($products as $p)
                     <div onclick="addToCart({{ json_encode($p) }})" 
+                         data-code="{{ strtolower($p->code) }}"
                          class="premium-card group cursor-pointer hover:border-orange-500 transition-all active:scale-95 overflow-hidden">
                         <div class="h-28 sm:h-32 bg-slate-50 dark:bg-slate-800 relative">
                             <img src="{{ $p->image ? cloudinary_url($p->image) : 'https://ui-avatars.com/api/?name='.urlencode($p->name).'&background=f97316&color=fff' }}" 
@@ -322,10 +323,15 @@
     // Real-time Search
     document.getElementById('productSearch').addEventListener('input', function(e) {
         const search = e.target.value.toLowerCase();
-        const cards = document.querySelectorAll('#productsGrid > div');
+        const cards = document.querySelectorAll('#productsGrid > div[data-code]');
         cards.forEach(card => {
             const name = card.querySelector('h4').textContent.toLowerCase();
-            card.style.display = name.includes(search) ? 'block' : 'none';
+            const code = card.getAttribute('data-code');
+            if (name.includes(search) || code.includes(search)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
         });
     });
 

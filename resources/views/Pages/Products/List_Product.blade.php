@@ -23,21 +23,22 @@
     </div>
 
     <!-- Filters & Search -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-2">
+    <form method="GET" action="{{ route('product.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-2">
         <div class="sm:col-span-2 lg:col-span-3 relative group">
-            <input type="text" placeholder="Search by name, code or category..." class="form-input pl-12 w-full">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, code or scan barcode..." class="form-input pl-12 w-full" autofocus>
             <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-orange-500 transition-colors"></i>
+            <button type="submit" class="hidden">Search</button>
         </div>
         <div class="relative">
-            <select class="form-input appearance-none cursor-pointer w-full pr-10">
+            <select name="category" class="form-input appearance-none cursor-pointer w-full pr-10" onchange="this.form.submit()">
                 <option value="">All Categories</option>
                 @foreach($categories ?? [] as $cat)
-                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                    <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
                 @endforeach
             </select>
             <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-xs"></i>
         </div>
-    </div>
+    </form>
 
     <!-- Products Table -->
     <div class="premium-card overflow-hidden stagger-3">
@@ -90,7 +91,7 @@
                             </td>
                             <td class="py-4 px-6 text-right">
                                 <div class="flex items-center justify-end gap-1.5">
-                                    <button onclick="printBarcode('{{ $product->code }}', '{{ $product->name }}', '{{ number_format($product->price, 2) }}')" 
+                                    <button onclick="printBarcode('{{ $product->code }}', '{{ $product->name }}', '{{ number_format($product->price, 2) }}', '{{ $product->barcode_symbology }}')" 
                                             class="w-7 h-7 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all"
                                             title="Print Barcode">
                                         <i class="fas fa-barcode text-[10px]"></i>
@@ -128,15 +129,15 @@
 
 <!-- Barcode Modal -->
 <div id="barcodeModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-    <div class="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl animate-slide-up">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-slide-up">
         <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
             <h3 class="font-extrabold text-orange-500 uppercase tracking-widest text-xs">Product Label</h3>
             <button onclick="closeBarcodeModal()" class="text-slate-400 hover:text-slate-600 transition-colors"><i class="fas fa-times"></i></button>
         </div>
-        <div class="p-10 text-center" id="printableBarcode">
+        <div class="p-8 text-center" id="printableBarcode">
             <h4 id="barcodeProductName" class="text-sm font-bold mb-2"></h4>
-            <div class="bg-white p-4 rounded-xl inline-block border border-slate-100 mb-2">
-                <svg id="barcodeSVG"></svg>
+            <div class="bg-white p-4 rounded-xl inline-flex justify-center border border-slate-100 mb-2 max-w-full overflow-hidden">
+                <svg id="barcodeSVG" class="max-w-full h-auto"></svg>
             </div>
             <p id="barcodePrice" class="text-lg font-black text-orange-500 mt-2"></p>
         </div>
@@ -148,18 +149,27 @@
 </div>
 
 <script>
-    function printBarcode(code, name, price) {
+    function printBarcode(code, name, price, symbology) {
         document.getElementById('barcodeProductName').textContent = name;
         document.getElementById('barcodePrice').textContent = 'Rs. ' + price;
         
-        JsBarcode("#barcodeSVG", code, {
-            format: "CODE128",
-            width: 2,
-            height: 60,
-            displayValue: true,
-            fontSize: 12,
-            font: "Outfit"
-        });
+        let format = symbology || 'CODE128';
+        if (format === 'C128') format = 'CODE128';
+        if (format === 'C39') format = 'CODE39';
+        
+        try {
+            JsBarcode("#barcodeSVG", code, {
+                format: format,
+                width: 2,
+                height: 60,
+                displayValue: true,
+                fontSize: 12,
+                font: "Outfit"
+            });
+        } catch(e) {
+            console.error("Barcode generation error: ", e);
+            alert("Could not generate barcode. Ensure the code matches the symbology format.");
+        }
         
         document.getElementById('barcodeModal').classList.remove('hidden');
     }
