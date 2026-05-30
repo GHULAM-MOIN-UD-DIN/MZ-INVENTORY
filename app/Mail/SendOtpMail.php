@@ -14,7 +14,7 @@ class SendOtpMail extends Mailable
     public $type;
     public $expiresInMinutes;
 
-    public function __construct(string $otpCode, string $type, int $expiresInMinutes = 15)
+    public function __construct(string $otpCode, string $type, int $expiresInMinutes = 5)
     {
         $this->otpCode = $otpCode;
         $this->type = $type;

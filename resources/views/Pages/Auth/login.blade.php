@@ -75,12 +75,14 @@
     </style>
 </head>
 
-<body class="bg-[#020617] text-slate-100 min-h-screen flex items-center justify-center p-4 relative overflow-hidden font-sans antialiased">
+<body class="bg-[#020617] text-slate-100 min-h-screen flex flex-col items-center justify-center py-10 px-4 relative overflow-x-hidden font-sans antialiased">
 
     <!-- Ambient Glowing Orbs in Background -->
-    <div class="absolute -top-40 -left-40 w-96 h-96 bg-orange-600/20 rounded-full filter blur-[120px] animate-pulse-slow"></div>
-    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-brand-800/20 rounded-full filter blur-[120px] animate-pulse-slow" style="animation-delay: 4s;"></div>
-    <div class="absolute top-1/2 left-1/3 w-80 h-80 bg-orange-500/10 rounded-full filter blur-[100px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-orange-600/20 rounded-full filter blur-[120px] animate-pulse-slow"></div>
+        <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-brand-800/20 rounded-full filter blur-[120px] animate-pulse-slow" style="animation-delay: 4s;"></div>
+        <div class="absolute top-1/2 left-1/3 w-80 h-80 bg-orange-500/10 rounded-full filter blur-[100px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+    </div>
 
     <!-- Login Container -->
     <div class="w-full max-w-[460px] relative z-10 animate-slide-up">

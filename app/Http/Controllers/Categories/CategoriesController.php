@@ -17,9 +17,13 @@ class CategoriesController extends Controller
     // Store New Category
     public function store(Request $request)
     {
+        $userId = \Illuminate\Support\Facades\Auth::user()->admin_id ?? \Illuminate\Support\Facades\Auth::id();
         $request->validate([
-            'name' => 'required|unique:categories',
-            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
+            'name' => [
+                'required',
+                \Illuminate\Validation\Rule::unique('categories')->where('user_id', $userId)
+            ],
+            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:5120'
         ]);
 
         $data = $request->all();
@@ -44,9 +48,13 @@ class CategoriesController extends Controller
     {
         $category = Category::findOrFail($id);
 
+        $userId = \Illuminate\Support\Facades\Auth::user()->admin_id ?? \Illuminate\Support\Facades\Auth::id();
         $request->validate([
-            'name' => 'required|unique:categories,name,' . $category->id,
-            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
+            'name' => [
+                'required',
+                \Illuminate\Validation\Rule::unique('categories')->where('user_id', $userId)->ignore($category->id)
+            ],
+            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:5120'
         ]);
 
         $data = $request->all();

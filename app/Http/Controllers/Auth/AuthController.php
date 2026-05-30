@@ -124,7 +124,7 @@ class AuthController extends Controller
                 $user,
                 $request->ip(),
                 $request->userAgent(),
-                now()->format('Y-m-d H:i:s')
+                now()->timezone('Asia/Karachi')->format('d M Y, h:i A')
             ));
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Login alert email failed: ' . $e->getMessage());
