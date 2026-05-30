@@ -17,6 +17,10 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
+# Configure PHP upload limits & tmp dir
+RUN echo "upload_max_filesize=10M\npost_max_size=12M\nfile_uploads=On\nupload_tmp_dir=/tmp" > /usr/local/etc/php/conf.d/uploads.ini
+RUN mkdir -p /tmp && chmod 1777 /tmp
+
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 

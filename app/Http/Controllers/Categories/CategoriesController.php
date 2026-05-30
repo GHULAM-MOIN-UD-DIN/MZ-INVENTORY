@@ -23,7 +23,7 @@ class CategoriesController extends Controller
                 'required',
                 \Illuminate\Validation\Rule::unique('categories')->where('user_id', $userId)
             ],
-            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:5120'
+            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg,webp|max:5120'
         ]);
 
         $data = $request->all();
@@ -54,7 +54,7 @@ class CategoriesController extends Controller
                 'required',
                 \Illuminate\Validation\Rule::unique('categories')->where('user_id', $userId)->ignore($category->id)
             ],
-            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:5120'
+            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg,webp|max:5120'
         ]);
 
         $data = $request->all();

@@ -102,7 +102,7 @@
                                         Click or drag icon to upload
                                     </p>
                                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                                        PNG, JPG or WEBP (Max. 2MB)
+                                        PNG, JPG or WEBP (Max. 5MB)
                                     </p>
                                 </div>
                                 <div id="fileName" 
