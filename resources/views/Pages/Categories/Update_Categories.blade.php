@@ -87,7 +87,7 @@
                                     <i class="fas fa-cloud-arrow-up text-xl"></i>
                                 </div>
                                 <p class="text-sm font-bold text-slate-600 dark:text-slate-300">Choose new image to replace</p>
-                                <p class="text-xs text-slate-400">PNG, JPG or WEBP (Max. 2MB)</p>
+                                <p class="text-xs text-slate-400">PNG, JPG or WEBP (Max. 5MB)</p>
                                 <div id="fileName" class="hidden mt-2 px-4 py-2 bg-orange-500 text-white text-xs font-bold rounded-full shadow-lg"></div>
                             </div>
                         </div>

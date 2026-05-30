@@ -287,7 +287,7 @@
                                             Click or drag image to upload
                                         </p>
                                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                                            PNG, JPG or WEBP (Max. 2MB)
+                                            PNG, JPG or WEBP (Max. 5MB)
                                         </p>
                                     </div>
                                     <div id="fileName" 
@@ -412,9 +412,9 @@
                 return;
             }
             
-            // Validate file size (2MB)
-            if (file.size > 2 * 1024 * 1024) {
-                alert('File size must be less than 2MB');
+            // Validate file size (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File size must be less than 5MB');
                 imageInput.value = '';
                 return;
             }

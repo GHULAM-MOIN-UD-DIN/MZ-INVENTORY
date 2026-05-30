@@ -55,6 +55,15 @@
     </script>
 
     <style>
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        html, body {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
         .glass-panel {
             background: rgba(15, 23, 42, 0.65);
             backdrop-filter: blur(20px) saturate(180%);
@@ -80,7 +89,7 @@
     </style>
 </head>
 
-<body class="bg-[#020617] text-slate-100 min-h-screen flex items-center justify-center p-4 relative overflow-hidden font-sans antialiased">
+<body class="bg-[#020617] text-slate-100 min-h-screen flex flex-col items-center justify-center py-6 sm:py-10 px-4 relative overflow-y-auto overflow-x-hidden font-sans antialiased">
 
     <!-- Ambient Glowing Orbs in Background -->
     <div class="absolute -top-40 -left-40 w-96 h-96 bg-orange-600/20 rounded-full filter blur-[120px] animate-pulse-slow"></div>
@@ -91,7 +100,7 @@
     <div class="w-full max-w-[460px] relative z-10 animate-slide-up">
         
         <!-- Brand identity logo -->
-        <div class="text-center mb-8 animate-float">
+        <div class="text-center mb-6 animate-float">
             <div class="inline-flex w-16 h-16 bg-gradient-to-tr from-orange-600 to-orange-400 rounded-2xl items-center justify-center shadow-2xl shadow-orange-500/30 overflow-hidden mb-3">
                 <span class="text-white font-extrabold text-2xl">MZ</span>
             </div>
@@ -102,11 +111,11 @@
         </div>
 
         <!-- Glassmorphic Form Card -->
-        <div class="glass-panel rounded-3xl p-8 sm:p-10 relative overflow-hidden">
+        <div class="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden">
             <!-- Subtle Orange Top Line -->
             <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-orange-500 to-orange-600"></div>
 
-            <div class="mb-8">
+            <div class="mb-6">
                 <h2 class="text-xl font-bold text-white">Verify Your Email</h2>
                 <p class="text-xs text-slate-400 mt-1">We've sent a 6-digit OTP code to <strong class="text-orange-500">{{ session('forgot_password_email') }}</strong>. Enter it below to proceed.</p>
                 <div class="mt-4 flex items-center justify-center gap-2 bg-slate-900/50 rounded-2xl py-2 px-4 border border-slate-800/80 max-w-[180px] mx-auto">
@@ -136,7 +145,7 @@
             </form>
 
             <!-- Resend/Cancel Redirect Link -->
-            <div class="mt-8 text-center border-t border-slate-800 pt-6">
+            <div class="mt-6 text-center border-t border-slate-800 pt-4">
                 <p class="text-xs text-slate-400 font-medium">
                     Did not receive code? 
                     <a href="{{ route('password.request') }}" class="text-orange-500 font-bold ml-1 hover:text-orange-400 transition-colors">Request New Code</a>
@@ -145,7 +154,7 @@
         </div>
         
         <!-- Footer info -->
-        <p class="text-center text-[10px] text-slate-500 uppercase tracking-widest mt-8 font-bold">&copy; 2026 MZ Inventory Pro &bull; All Rights Reserved</p>
+        <p class="text-center text-[10px] text-slate-500 uppercase tracking-widest mt-6 font-bold">&copy; 2026 MZ Inventory Pro &bull; All Rights Reserved</p>
     </div>
 
     <!-- SweetAlert notifications & Countdown Timer -->

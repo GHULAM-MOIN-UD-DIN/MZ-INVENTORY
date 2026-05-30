@@ -23,16 +23,21 @@ class ProductController extends Controller
     // Store Product
     public function store(Request $request)
     {
+        $userId = Auth::user()->admin_id ?? Auth::id();
         $request->validate([
             'type' => 'required',
             'name' => 'required',
-            'code' => 'required|unique:products',
+            'code' => [
+                'required',
+                \Illuminate\Validation\Rule::unique('products')->where('user_id', $userId)
+            ],
             'barcode_symbology' => 'required',
             'cost' => 'required|numeric',
             'price' => 'required|numeric',
             'quantity' => 'required|numeric',
             'tax_method' => 'required',
-            'category_id' => 'required|exists:categories,id'
+            'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg,webp|max:5120'
         ]);
 
         $data = $request->all();
@@ -79,16 +84,21 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
+        $userId = Auth::user()->admin_id ?? Auth::id();
         $request->validate([
             'type' => 'required',
             'name' => 'required',
-            'code' => 'required|unique:products,code,' . $product->id,
+            'code' => [
+                'required',
+                \Illuminate\Validation\Rule::unique('products')->where('user_id', $userId)->ignore($product->id)
+            ],
             'barcode_symbology' => 'required',
             'cost' => 'required|numeric',
             'price' => 'required|numeric',
             'quantity' => 'required|numeric',
             'tax_method' => 'required',
-            'category_id' => 'required|exists:categories,id'
+            'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg,webp|max:5120'
         ]);
 
         $data = $request->all();

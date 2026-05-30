@@ -20,12 +20,12 @@ class SettingController extends Controller
         $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
         ];
 
         if ($user->role === 'admin') {
             $rules['shop_name'] = 'nullable|string|max:255';
-            $rules['shop_logo'] = 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048';
+            $rules['shop_logo'] = 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120';
         }
 
         $data = $request->validate($rules);

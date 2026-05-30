@@ -155,7 +155,7 @@
                                 <i class="fas fa-cloud-arrow-up text-xl"></i>
                             </div>
                             <p class="text-sm font-bold text-slate-600 dark:text-slate-300">Choose new image to replace</p>
-                            <p class="text-xs text-slate-400">PNG, JPG or WEBP (Max. 2MB)</p>
+                            <p class="text-xs text-slate-400">PNG, JPG or WEBP (Max. 5MB)</p>
                         </div>
                     </div>
                 </div>
