@@ -167,8 +167,19 @@
                 font: "Outfit"
             });
         } catch(e) {
-            console.error("Barcode generation error: ", e);
-            alert("Could not generate barcode. Ensure the code matches the symbology format.");
+            // Fallback to CODE128 which supports all characters
+            try {
+                JsBarcode("#barcodeSVG", code, {
+                    format: "CODE128",
+                    width: 2,
+                    height: 60,
+                    displayValue: true,
+                    fontSize: 12,
+                    font: "Outfit"
+                });
+            } catch(e2) {
+                console.error("Barcode generation error: ", e2);
+            }
         }
         
         document.getElementById('barcodeModal').classList.remove('hidden');

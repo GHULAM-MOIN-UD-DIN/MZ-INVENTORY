@@ -65,8 +65,8 @@
                         <label class="form-label">Product Type *</label>
                         <select name="type" class="form-input appearance-none" required>
                             @foreach($productTypes as $type)
-                                <option value="{{ $type }}" {{ $product->type == $type ? 'selected' : '' }}>
-                                    {{ $type === 'Standard' ? '📦 ' : ($type === 'Combo' ? '🎁 ' : ($type === 'Digital' ? '💻 ' : '🔧 ')) }}{{ $type }}
+                                <option value="{{ $type->name }}" {{ $product->type == $type->name ? 'selected' : '' }}>
+                                    📦 {{ $type->name }}
                                 </option>
                             @endforeach
                         </select>
@@ -84,8 +84,8 @@
                     <div class="form-group group">
                         <label class="form-label">Barcode Symbology *</label>
                         <select name="barcode_symbology" class="form-input appearance-none" required>
-                            @foreach($barcodeSymbologies as $key => $label)
-                                <option value="{{ $key }}" {{ $product->barcode_symbology == $key ? 'selected' : '' }}>{{ $label }}</option>
+                            @foreach($barcodeSymbologies as $symbology)
+                                <option value="{{ $symbology->name }}" {{ $product->barcode_symbology == $symbology->name ? 'selected' : '' }}>{{ $symbology->name }}</option>
                             @endforeach
                         </select>
                     </div>

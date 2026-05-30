@@ -18,7 +18,8 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\People\UserController;
-
+use App\Http\Controllers\Settings\ProductTypeController;
+use App\Http\Controllers\Settings\BarcodeSymbologyController;
 // Guest Authentication Routes
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -139,6 +140,27 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', [ReportController::class, 'index'])->name('report.index');
             Route::get('/profit-loss', [ReportController::class, 'profitLoss'])->name('report.profit_loss');
             Route::get('/inventory', [ReportController::class, 'inventoryReport'])->name('report.inventory');
+        });
+
+        // Settings - Product Types & Barcodes
+        Route::prefix('settings')->group(function() {
+            Route::prefix('product-types')->group(function() {
+                Route::get('/', [ProductTypeController::class, 'index'])->name('product-type.index');
+                Route::get('/add', [ProductTypeController::class, 'create'])->name('product-type.create');
+                Route::post('/store', [ProductTypeController::class, 'store'])->name('product-type.store');
+                Route::get('/edit/{id}', [ProductTypeController::class, 'edit'])->name('product-type.edit');
+                Route::post('/update/{id}', [ProductTypeController::class, 'update'])->name('product-type.update');
+                Route::delete('/delete/{id}', [ProductTypeController::class, 'destroy'])->name('product-type.destroy');
+            });
+
+            Route::prefix('barcode-symbologies')->group(function() {
+                Route::get('/', [BarcodeSymbologyController::class, 'index'])->name('barcode-symbology.index');
+                Route::get('/add', [BarcodeSymbologyController::class, 'create'])->name('barcode-symbology.create');
+                Route::post('/store', [BarcodeSymbologyController::class, 'store'])->name('barcode-symbology.store');
+                Route::get('/edit/{id}', [BarcodeSymbologyController::class, 'edit'])->name('barcode-symbology.edit');
+                Route::post('/update/{id}', [BarcodeSymbologyController::class, 'update'])->name('barcode-symbology.update');
+                Route::delete('/delete/{id}', [BarcodeSymbologyController::class, 'destroy'])->name('barcode-symbology.destroy');
+            });
         });
     });
 

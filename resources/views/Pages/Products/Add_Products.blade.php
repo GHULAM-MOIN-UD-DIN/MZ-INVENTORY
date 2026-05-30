@@ -94,8 +94,8 @@
                                            focus:ring-4 focus:ring-orange-500/10 transition-all duration-300
                                            appearance-none cursor-pointer" required>
                                 @foreach($productTypes as $type)
-                                    <option value="{{ $type }}" class="bg-white dark:bg-slate-800">
-                                        {{ $type === 'Standard' ? '📦 ' : ($type === 'Combo' ? '🎁 ' : ($type === 'Digital' ? '💻 ' : '🔧 ')) }}{{ $type }}
+                                    <option value="{{ $type->name }}" class="bg-white dark:bg-slate-800">
+                                        📦 {{ $type->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -144,8 +144,8 @@
                                            focus:border-orange-500 focus:bg-white dark:focus:bg-slate-900 
                                            focus:ring-4 focus:ring-orange-500/10 transition-all duration-300
                                            appearance-none cursor-pointer" required>
-                                @foreach($barcodeSymbologies as $key => $label)
-                                    <option value="{{ $key }}" class="bg-white dark:bg-slate-800">{{ $label }}</option>
+                                @foreach($barcodeSymbologies as $symbology)
+                                    <option value="{{ $symbology->name }}" class="bg-white dark:bg-slate-800">{{ $symbology->name }}</option>
                                 @endforeach
                             </select>
                             <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">

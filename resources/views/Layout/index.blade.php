@@ -396,8 +396,14 @@
                 @if(auth()->user()->role === 'admin')
                     <!-- App Settings -->
                     <div class="px-6 mt-6 mb-2"><p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Configuration</p></div>
-                    <a href="{{ route('setting.index') }}" class="nav-link {{ request()->is('settings*') ? 'active' : '' }}">
+                    <a href="{{ route('setting.index') }}" class="nav-link {{ request()->is('settings') ? 'active' : '' }}">
                         <i class="fas fa-cog"></i><span>App Settings</span>
+                    </a>
+                    <a href="{{ route('product-type.index') }}" class="nav-link {{ request()->is('settings/product-types*') ? 'active' : '' }}">
+                        <i class="fas fa-box-open"></i><span>Product Types</span>
+                    </a>
+                    <a href="{{ route('barcode-symbology.index') }}" class="nav-link {{ request()->is('settings/barcode-symbologies*') ? 'active' : '' }}">
+                        <i class="fas fa-barcode"></i><span>Barcode Symbologies</span>
                     </a>
                 @endif
             </nav>
