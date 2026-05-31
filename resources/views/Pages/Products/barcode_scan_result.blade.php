@@ -137,12 +137,20 @@
 
                 {{-- Action Buttons --}}
                 <div class="flex flex-wrap gap-3 mt-6 justify-center">
+                    @if(auth()->user()->role === 'admin' || auth()->user()->role === 'manager')
                     <a href="{{ route('product.edit', $product->id) }}" class="px-6 py-3 rounded-xl bg-orange-500 text-white font-bold text-xs uppercase tracking-widest hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 flex items-center gap-2">
                         <i class="fas fa-pen"></i> Edit Product
                     </a>
+                    @endif
+                    @if(auth()->user()->role === 'admin' || auth()->user()->role === 'manager')
                     <a href="{{ route('product.index') }}" class="px-6 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold text-xs uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center gap-2">
                         <i class="fas fa-arrow-left"></i> Back to Products
                     </a>
+                    @else
+                    <a href="{{ route('pos.index') }}" class="px-6 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold text-xs uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center gap-2">
+                        <i class="fas fa-arrow-left"></i> Back to POS
+                    </a>
+                    @endif
                     <button onclick="window.print()" class="px-6 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold text-xs uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center gap-2">
                         <i class="fas fa-print"></i> Print
                     </button>
@@ -166,12 +174,20 @@
                 <i class="fas fa-box-open text-6xl text-slate-200 dark:text-slate-700 mb-6 block"></i>
                 <p class="text-slate-400 text-sm mb-6">No product was found matching this barcode in your inventory.</p>
                 <div class="flex justify-center gap-3">
+                    @if(auth()->user()->role === 'admin' || auth()->user()->role === 'manager')
                     <a href="{{ route('product.create') }}" class="px-6 py-3 rounded-xl bg-orange-500 text-white font-bold text-xs uppercase tracking-widest hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 flex items-center gap-2">
                         <i class="fas fa-plus"></i> Add Product
                     </a>
+                    @endif
+                    @if(auth()->user()->role === 'admin' || auth()->user()->role === 'manager')
                     <a href="{{ route('product.index') }}" class="px-6 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold text-xs uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center gap-2">
                         <i class="fas fa-arrow-left"></i> Back to Products
                     </a>
+                    @else
+                    <a href="{{ route('pos.index') }}" class="px-6 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold text-xs uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center gap-2">
+                        <i class="fas fa-arrow-left"></i> Back to POS
+                    </a>
+                    @endif
                 </div>
             </div>
         </div>

@@ -66,9 +66,9 @@
                                     <a href="{{ route('customer.edit', $customer->id) }}" class="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all">
                                         <i class="fas fa-user-edit text-xs"></i>
                                     </a>
-                                    <form action="{{ route('customer.destroy', $customer->id) }}" method="POST" class="inline" onsubmit="return confirm('Remove this customer record?')">
+                                    <form id="delete-cust-form-{{ $customer->id }}" action="{{ route('customer.destroy', $customer->id) }}" method="POST" class="inline">
                                         @csrf @method('DELETE')
-                                        <button class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
+                                        <button type="button" onclick="confirmDeleteCust({{ $customer->id }})" class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
                                             <i class="fas fa-trash text-xs"></i>
                                         </button>
                                     </form>
@@ -88,4 +88,9 @@
         </div>
     </div>
 </div>
+<script>
+function confirmDeleteCust(id) {
+    Swal.fire({ icon:'error', title:'Delete Customer?', text:'This customer record will be permanently removed.', showCancelButton:true, confirmButtonText:'Delete', cancelButtonText:'Cancel' }).then((r) => { if(r.isConfirmed) document.getElementById('delete-cust-form-'+id).submit(); });
+}
+</script>
 @endsection

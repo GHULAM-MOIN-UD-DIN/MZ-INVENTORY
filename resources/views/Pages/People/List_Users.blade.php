@@ -79,10 +79,10 @@
                                     <a href="{{ route('user.edit', $user->id) }}" class="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all">
                                         <i class="fas fa-edit text-xs"></i>
                                     </a>
-                                    <form action="{{ route('user.destroy', $user->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this staff member?');">
+                                    <form id="delete-user-form-{{ $user->id }}" action="{{ route('user.destroy', $user->id) }}" method="POST" class="inline-block">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
+                                        <button type="button" onclick="confirmDeleteUser({{ $user->id }})" class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
                                             <i class="fas fa-trash text-xs"></i>
                                         </button>
                                     </form>
@@ -101,4 +101,9 @@
         </div>
     </div>
 </div>
+<script>
+function confirmDeleteUser(id) {
+    Swal.fire({ icon:'error', title:'Delete Staff Member?', text:'This user will be permanently removed from the system.', showCancelButton:true, confirmButtonText:'Delete', cancelButtonText:'Cancel' }).then((r) => { if(r.isConfirmed) document.getElementById('delete-user-form-'+id).submit(); });
+}
+</script>
 @endsection

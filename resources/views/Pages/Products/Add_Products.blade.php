@@ -406,14 +406,24 @@
             // Validate file type
             const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
             if (!validTypes.includes(file.type)) {
-                alert('Please select a valid image file (PNG, JPG, or WEBP)');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid File Type',
+                    text: 'Please select a valid image file (PNG, JPG, or WEBP)',
+                    confirmButtonColor: '#f97316'
+                });
                 imageInput.value = '';
                 return;
             }
             
             // Validate file size (5MB)
             if (file.size > 5 * 1024 * 1024) {
-                alert('File size must be less than 5MB');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'File Too Large',
+                    text: 'File size must be less than 5MB',
+                    confirmButtonColor: '#f97316'
+                });
                 imageInput.value = '';
                 return;
             }

@@ -168,7 +168,12 @@
             if (existing.qty < product.quantity) {
                 existing.qty++;
             } else {
-                alert('Out of stock!');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Out of Stock',
+                    text: 'Cannot add more items than available stock.',
+                    confirmButtonColor: '#f97316'
+                });
             }
         } else {
             cart.push({ ...product, qty: 1 });
@@ -221,7 +226,12 @@
         if (cart[index].qty <= 0) cart.splice(index, 1);
         else if (cart[index].qty > cart[index].quantity) {
             cart[index].qty = cart[index].quantity;
-            alert('Max stock reached');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Max Stock Reached',
+                text: 'Cannot exceed available stock limit.',
+                confirmButtonColor: '#f97316'
+            });
         }
         renderCart();
     }
@@ -232,10 +242,21 @@
     }
 
     function clearCart() {
-        if (confirm('Clear entire cart?')) {
-            cart = [];
-            renderCart();
-        }
+        Swal.fire({
+            title: 'Clear Cart?',
+            text: 'Are you sure you want to clear the entire cart?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, clear it',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#f97316',
+            cancelButtonColor: '#64748b'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                cart = [];
+                renderCart();
+            }
+        });
     }
 
     function calculateTotals() {
@@ -253,7 +274,12 @@
 
     function completeSale() {
         if (cart.length === 0) {
-            alert('Please add items to cart first!');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Empty Cart',
+                text: 'Please add items to cart first!',
+                confirmButtonColor: '#f97316'
+            });
             return;
         }
         
@@ -263,7 +289,12 @@
         const cashReceived = parseFloat(document.getElementById('cashReceived').value) || 0;
 
         if (document.getElementById('posPaymentMethod').value === 'Cash' && cashReceived < total) {
-            alert('Cash received is less than total payable amount!');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Insufficient Cash',
+                text: 'Cash received is less than total payable amount!',
+                confirmButtonColor: '#f97316'
+            });
             return;
         }
 

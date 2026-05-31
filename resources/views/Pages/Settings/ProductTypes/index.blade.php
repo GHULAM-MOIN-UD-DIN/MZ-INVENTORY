@@ -44,9 +44,9 @@
                                     <a href="{{ route('product-type.edit', $type->id) }}" class="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all">
                                         <i class="fas fa-pen text-xs"></i>
                                     </a>
-                                    <form action="{{ route('product-type.destroy', $type->id) }}" method="POST" class="inline" onsubmit="return confirm('Delete this product type?')">
+                                    <form id="delete-type-form-{{ $type->id }}" action="{{ route('product-type.destroy', $type->id) }}" method="POST" class="inline">
                                         @csrf @method('DELETE')
-                                        <button class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
+                                        <button type="button" onclick="confirmDeleteType({{ $type->id }})" class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
                                             <i class="fas fa-trash text-xs"></i>
                                         </button>
                                     </form>
@@ -70,4 +70,9 @@
         @endif
     </div>
 </div>
+<script>
+function confirmDeleteType(id) {
+    Swal.fire({ icon:'error', title:'Delete Product Type?', text:'This product type will be permanently removed.', showCancelButton:true, confirmButtonText:'Delete', cancelButtonText:'Cancel' }).then((r) => { if(r.isConfirmed) document.getElementById('delete-type-form-'+id).submit(); });
+}
+</script>
 @endsection

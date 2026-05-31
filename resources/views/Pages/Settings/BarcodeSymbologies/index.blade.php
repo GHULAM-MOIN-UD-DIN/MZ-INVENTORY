@@ -50,9 +50,9 @@
                                     <a href="{{ route('barcode-symbology.edit', $symbology->id) }}" class="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all">
                                         <i class="fas fa-pen text-xs"></i>
                                     </a>
-                                    <form action="{{ route('barcode-symbology.destroy', $symbology->id) }}" method="POST" class="inline" onsubmit="return confirm('Delete this barcode symbology?')">
+                                    <form id="delete-symbology-form-{{ $symbology->id }}" action="{{ route('barcode-symbology.destroy', $symbology->id) }}" method="POST" class="inline">
                                         @csrf @method('DELETE')
-                                        <button class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
+                                        <button type="button" onclick="confirmDeleteSymbology({{ $symbology->id }})" class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
                                             <i class="fas fa-trash text-xs"></i>
                                         </button>
                                     </form>
@@ -76,4 +76,23 @@
         @endif
     </div>
 </div>
+
+<script>
+    function confirmDeleteSymbology(id) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Delete Barcode Symbology?',
+            text: 'This barcode symbology will be permanently removed. This cannot be undone.',
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#64748b'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-symbology-form-' + id).submit();
+            }
+        });
+    }
+</script>
 @endsection

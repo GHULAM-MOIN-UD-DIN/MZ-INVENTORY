@@ -178,7 +178,6 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
 <script>
     function switchBarcodeTab(tab) {
         const barcodeView = document.getElementById('barcodeView');

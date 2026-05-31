@@ -18,6 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -525,14 +526,14 @@
                     </div>
                 </div>
 
-                <form action="{{ route('logout') }}" method="POST" class="inline-flex">
+                <form action="{{ route('logout') }}" method="POST" class="hidden sm:inline-flex">
                     @csrf
                     <button type="submit" class="w-10 h-10 rounded-xl flex items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 transition-all hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400" title="Logout">
                         <i class="fas fa-power-off"></i>
                     </button>
                 </form>
 
-                <div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1"></div>
+                <div class="hidden sm:block h-8 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1"></div>
                 
                 <div class="flex items-center gap-3 cursor-pointer group" onclick="window.location.href='{{ route('setting.index') }}'">
                     <div class="hidden text-right lg:block">
@@ -557,7 +558,9 @@
         </footer>
     </div>
 
+    @if(auth()->user()->role === 'admin' || auth()->user()->role === 'manager')
     <a href="{{ route('product.create') }}" class="fixed bottom-8 right-8 w-14 h-14 bg-orange-500 text-white rounded-2xl flex items-center justify-center shadow-xl shadow-orange-500/40 hover:scale-110 hover:rotate-90 transition-all duration-300 z-50 animate-float"><i class="fas fa-plus text-xl"></i></a>
+    @endif
 
     <script>
         window.addEventListener('load', () => {

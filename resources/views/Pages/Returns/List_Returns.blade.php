@@ -57,9 +57,9 @@
                                     <button class="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all">
                                         <i class="fas fa-eye text-xs"></i>
                                     </button>
-                                    <form action="{{ route('return.destroy', $return->id) }}" method="POST" class="inline" onsubmit="return confirm('Remove this return record?')">
+                                    <form id="delete-return-form-{{ $return->id }}" action="{{ route('return.destroy', $return->id) }}" method="POST" class="inline">
                                         @csrf @method('DELETE')
-                                        <button class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
+                                        <button type="button" onclick="confirmDeleteReturn({{ $return->id }})" class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
                                             <i class="fas fa-trash text-xs"></i>
                                         </button>
                                     </form>
@@ -79,4 +79,9 @@
         </div>
     </div>
 </div>
+<script>
+function confirmDeleteReturn(id) {
+    Swal.fire({ icon:'error', title:'Delete Return?', text:'This return record will be permanently removed.', showCancelButton:true, confirmButtonText:'Delete', cancelButtonText:'Cancel' }).then((r) => { if(r.isConfirmed) document.getElementById('delete-return-form-'+id).submit(); });
+}
+</script>
 @endsection
