@@ -9,6 +9,21 @@ use Illuminate\Http\Request;
 class BarcodeController extends Controller
 {
     /**
+     * Public product page - accessible without login via QR code scan.
+     * Does NOT show cost price, profit, or stock quantity.
+     */
+    public function publicView($code)
+    {
+        $product = Product::with('category')->where('code', $code)->first();
+
+        if (!$product) {
+            return view('Pages.Products.public_product', ['product' => null, 'code' => $code]);
+        }
+
+        return view('Pages.Products.public_product', compact('product'));
+    }
+
+    /**
      * Show product details when a barcode is scanned.
      * Looks up by product code.
      */

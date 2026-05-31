@@ -48,7 +48,7 @@
 
     <!-- Products Table -->
     <div class="premium-card overflow-hidden stagger-3">
-        <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800">
+        <div class="max-h-[500px] overflow-y-auto overflow-x-auto scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800 custom-scrollbar">
             <table class="w-full text-left min-w-[800px]">
                 <thead>
                     <tr class="bg-slate-50/50 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-800">
@@ -154,7 +154,7 @@
             </div>
             
             <!-- Barcode -->
-            <div id="barcodeView" class="bg-white p-4 rounded-xl inline-flex justify-center border border-slate-100 mb-2 max-w-full overflow-hidden">
+            <div id="barcodeView" class="bg-white p-4 rounded-xl inline-flex justify-center border border-slate-100 mb-2 max-w-full overflow-x-auto">
                 <svg id="barcodeSVG" class="max-w-full h-auto"></svg>
             </div>
             
@@ -203,7 +203,7 @@
         const name = btn.getAttribute('data-name');
         const price = btn.getAttribute('data-price');
         const symbology = btn.getAttribute('data-symbology');
-        const scanUrl = window.location.origin + '/barcode/scan/' + encodeURIComponent(code);
+        const scanUrl = window.location.origin + '/p/' + encodeURIComponent(code);
 
         document.getElementById('barcodeProductName').textContent = name;
         document.getElementById('barcodePrice').textContent = 'Rs. ' + price;

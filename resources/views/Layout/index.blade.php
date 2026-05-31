@@ -472,7 +472,7 @@
                     </button>
 
                     <!-- Dropdown Card -->
-                    <div id="notifications-dropdown" class="hidden absolute right-0 mt-3 w-80 sm:w-96 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-2xl z-[100] animate-slide-up overflow-hidden">
+                    <div id="notifications-dropdown" class="hidden fixed sm:absolute top-[70px] sm:top-auto left-4 sm:left-auto right-4 sm:right-0 mt-3 w-auto sm:w-96 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-2xl z-[100] animate-slide-up overflow-hidden">
                         <!-- Dropdown Header -->
                         <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
                             <div class="flex items-center gap-2">
@@ -494,7 +494,7 @@
                                         <i class="{{ $notification['icon'] }} text-xs"></i>
                                     </div>
                                     <div class="flex-1 min-w-0 pr-6">
-                                        <a href="{{ $notification['url'] }}" class="block">
+                                        <a href="#" onclick="dismissNotification(event, '{{ $notification['id'] }}', '{{ $notification['url'] }}')" class="block">
                                             <p class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-orange-500 transition-colors truncate">
                                                 {{ $notification['title'] }}
                                             </p>
@@ -629,9 +629,11 @@
             }
         });
 
-        function dismissNotification(event, id) {
-            event.stopPropagation();
-            event.preventDefault();
+        function dismissNotification(event, id, redirectUrl = null) {
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
             
             // Fade out item immediately in UI for responsive feel
             const item = document.getElementById(`notification-item-${id}`);
@@ -642,7 +644,12 @@
                 setTimeout(() => {
                     item.remove();
                     updateBadgeCount(-1);
+                    if (redirectUrl && redirectUrl !== '#') {
+                        window.location.href = redirectUrl;
+                    }
                 }, 300);
+            } else if (redirectUrl && redirectUrl !== '#') {
+                window.location.href = redirectUrl;
             }
 
             fetch(`/notifications/dismiss/${id}`, {

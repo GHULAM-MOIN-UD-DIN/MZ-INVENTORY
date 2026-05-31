@@ -44,7 +44,7 @@
 
     <!-- Sales Table -->
     <div class="premium-card overflow-hidden stagger-3 mx-4 md:mx-0">
-        <div class="overflow-x-auto custom-scrollbar">
+        <div class="max-h-[500px] overflow-y-auto overflow-x-auto custom-scrollbar scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800">
             <table class="w-full text-left min-w-[1000px]">
                 <thead>
                     <tr class="bg-slate-50/50 dark:bg-slate-900/50">

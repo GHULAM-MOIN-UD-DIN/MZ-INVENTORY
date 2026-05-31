@@ -9,13 +9,13 @@
         {{-- Product Found --}}
         <div class="premium-card overflow-hidden">
             {{-- Header with gradient --}}
-            <div class="bg-gradient-to-r from-orange-500 to-orange-400 p-6 text-white flex items-center gap-4">
-                <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-                    <i class="fas fa-barcode text-2xl"></i>
+            <div class="bg-gradient-to-r from-orange-500 to-orange-400 p-4 sm:p-6 text-white flex items-center gap-3 sm:gap-4">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-barcode text-xl sm:text-2xl"></i>
                 </div>
-                <div>
-                    <h2 class="text-2xl font-extrabold tracking-tight">Product Found</h2>
-                    <p class="text-white/80 text-sm font-medium mt-0.5">Scanned Code: <span class="font-bold text-white">{{ $product->code }}</span></p>
+                <div class="min-w-0">
+                    <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight truncate">Product Found</h2>
+                    <p class="text-white/80 text-xs sm:text-sm font-medium mt-0.5">Scanned Code: <span class="font-bold text-white">{{ $product->code }}</span></p>
                 </div>
             </div>
 
@@ -130,8 +130,8 @@
 
                 {{-- Barcode Display --}}
                 <div class="mt-6 text-center">
-                    <div class="inline-block bg-white p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
-                        <svg id="productBarcode"></svg>
+                    <div class="inline-block bg-white p-4 sm:p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm max-w-full overflow-x-auto">
+                        <svg id="productBarcode" class="max-w-full h-auto"></svg>
                     </div>
                 </div>
 

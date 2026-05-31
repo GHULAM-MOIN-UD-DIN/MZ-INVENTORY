@@ -24,7 +24,7 @@
 
     <!-- Supplier Table -->
     <div class="premium-card overflow-hidden stagger-2">
-        <div class="overflow-x-auto">
+        <div class="max-h-[500px] overflow-y-auto overflow-x-auto custom-scrollbar">
             <table class="w-full text-left">
                 <thead>
                     <tr class="bg-slate-50/50 dark:bg-slate-900/50">

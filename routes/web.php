@@ -43,6 +43,9 @@ Route::middleware(['guest'])->group(function () {
 });
 
 // Authenticated Application Routes
+// Public Product Page (No Auth Required - for QR code scanning by anyone)
+Route::get('/p/{code}', [BarcodeController::class, 'publicView'])->name('product.public');
+
 Route::middleware(['auth'])->group(function () {
     
     // Logout Action

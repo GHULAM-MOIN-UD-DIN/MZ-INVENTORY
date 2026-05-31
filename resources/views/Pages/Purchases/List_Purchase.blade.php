@@ -44,7 +44,7 @@
 
     <!-- Purchase Table -->
     <div class="premium-card overflow-hidden stagger-3">
-        <div class="overflow-x-auto">
+        <div class="max-h-[500px] overflow-y-auto overflow-x-auto scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800 custom-scrollbar">
             <table class="w-full text-left">
                 <thead>
                     <tr class="bg-slate-50/50 dark:bg-slate-900/50">
