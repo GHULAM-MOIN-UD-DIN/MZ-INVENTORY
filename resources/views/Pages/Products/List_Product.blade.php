@@ -161,7 +161,7 @@
             <!-- QR Code (encodes URL for scanning) -->
             <div id="qrcodeView" class="hidden">
                 <div class="bg-white p-4 rounded-xl inline-block border border-slate-100 mb-2">
-                    <canvas id="qrCanvas"></canvas>
+                    <div id="qrCanvas" class="flex justify-center bg-white"></div>
                 </div>
                 <p class="text-[9px] text-slate-400 font-bold mt-1"><i class="fas fa-mobile-alt text-orange-500 mr-1"></i>Scan with phone camera to see product details</p>
             </div>
@@ -243,20 +243,19 @@
         
         // Generate QR Code with scan URL
         try {
-            const canvas = document.getElementById('qrCanvas');
-            if (canvas && typeof QRCode !== 'undefined') {
-                QRCode.toCanvas(canvas, scanUrl, {
-                    width: 200,
-                    margin: 2,
-                    color: {
-                        dark: '#0f172a',
-                        light: '#ffffff'
-                    }
-                }, function(error) {
-                    if (error) console.error('QR Code error:', error);
+            const qrContainer = document.getElementById('qrCanvas');
+            if (qrContainer && typeof QRCode !== 'undefined') {
+                qrContainer.innerHTML = '';
+                new QRCode(qrContainer, {
+                    text: scanUrl,
+                    width: 160,
+                    height: 160,
+                    colorDark : "#0f172a",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.M
                 });
             } else {
-                console.warn('QRCode library is not loaded or Canvas is missing.');
+                console.warn('QRCode library is not loaded or Container is missing.');
             }
         } catch (e) {
             console.error('QR Code generation failed:', e);
@@ -280,7 +279,7 @@
                         body { font-family: 'Outfit', sans-serif; text-align: center; padding: 20px; }
                         h4 { margin: 0 0 10px 0; font-size: 14px; }
                         p { margin: 10px 0 0 0; font-size: 18px; font-weight: bold; color: #f97316; }
-                        svg, canvas { max-width: 100%; }
+                        svg, canvas, img { max-width: 100%; }
                         button { display: none !important; }
                         .hidden { display: none !important; }
                     </style>

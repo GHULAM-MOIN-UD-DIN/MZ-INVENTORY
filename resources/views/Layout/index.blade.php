@@ -18,7 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -551,16 +551,18 @@
             </div>
         </header>
 
-        <main class="flex-1 p-6 lg:p-10 animate-fade-in">@yield('content')</main>
+        <main class="flex-1 p-6 lg:p-10 animate-fade-in relative">
+            @yield('content')
+
+            @if(auth()->user()->role === 'admin' || auth()->user()->role === 'manager')
+            <a href="{{ route('product.create') }}" class="fixed bottom-8 right-8 w-14 h-14 bg-orange-500 text-white rounded-2xl flex items-center justify-center shadow-xl shadow-orange-500/40 hover:scale-110 hover:rotate-90 transition-all duration-300 z-30 animate-float"><i class="fas fa-plus text-xl"></i></a>
+            @endif
+        </main>
 
         <footer class="p-6 text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest border-t border-slate-100 dark:border-slate-800">
             <p>&copy; 2026 MZ Inventory Pro &bull; Built with <i class="fas fa-heart text-orange-500"></i></p>
         </footer>
     </div>
-
-    @if(auth()->user()->role === 'admin' || auth()->user()->role === 'manager')
-    <a href="{{ route('product.create') }}" class="fixed bottom-8 right-8 w-14 h-14 bg-orange-500 text-white rounded-2xl flex items-center justify-center shadow-xl shadow-orange-500/40 hover:scale-110 hover:rotate-90 transition-all duration-300 z-50 animate-float"><i class="fas fa-plus text-xl"></i></a>
-    @endif
 
     <script>
         window.addEventListener('load', () => {
