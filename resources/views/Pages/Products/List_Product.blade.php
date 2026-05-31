@@ -24,9 +24,15 @@
 
     <!-- Filters & Search -->
     <form method="GET" action="{{ route('product.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-2">
-        <div class="sm:col-span-2 lg:col-span-3 relative group">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, code or scan barcode..." class="form-input pl-12 w-full" autofocus>
-            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-orange-500 transition-colors"></i>
+        <div class="sm:col-span-2 lg:col-span-3 flex gap-2">
+            <div class="relative flex-1 group">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, code or scan barcode..." class="form-input pl-12 w-full" autofocus>
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-orange-500 transition-colors"></i>
+            </div>
+            <button type="button" onclick="scanProductListCamera()" class="px-4 py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-orange-500/20" title="Scan Barcode using Camera">
+                <i class="fas fa-camera text-sm"></i>
+                <span class="hidden sm:inline text-xs font-black uppercase tracking-wider">Scan Camera</span>
+            </button>
             <button type="submit" class="hidden">Search</button>
         </div>
         <div class="relative">
@@ -140,28 +146,74 @@
         </div>
         <div class="p-8 text-center" id="printableBarcode">
             <h4 id="barcodeProductName" class="text-sm font-bold mb-2"></h4>
-            <div class="bg-white p-4 rounded-xl inline-flex justify-center border border-slate-100 mb-2 max-w-full overflow-hidden">
+            
+            <!-- Tab Switcher -->
+            <div class="flex justify-center gap-2 mb-4">
+                <button onclick="switchBarcodeTab('barcode')" id="tabBarcode" class="px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest bg-orange-500 text-white transition-all">Barcode</button>
+                <button onclick="switchBarcodeTab('qrcode')" id="tabQrcode" class="px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest bg-slate-100 dark:bg-slate-800 text-slate-500 transition-all">QR Code</button>
+            </div>
+            
+            <!-- Barcode -->
+            <div id="barcodeView" class="bg-white p-4 rounded-xl inline-flex justify-center border border-slate-100 mb-2 max-w-full overflow-hidden">
                 <svg id="barcodeSVG" class="max-w-full h-auto"></svg>
             </div>
+            
+            <!-- QR Code (encodes URL for scanning) -->
+            <div id="qrcodeView" class="hidden">
+                <div class="bg-white p-4 rounded-xl inline-block border border-slate-100 mb-2">
+                    <canvas id="qrCanvas"></canvas>
+                </div>
+                <p class="text-[9px] text-slate-400 font-bold mt-1"><i class="fas fa-mobile-alt text-orange-500 mr-1"></i>Scan with phone camera to see product details</p>
+            </div>
+            
             <p id="barcodePrice" class="text-lg font-black text-orange-500 mt-2"></p>
         </div>
         <div class="p-6 bg-slate-50 dark:bg-slate-800/50 flex gap-3">
             <button onclick="closeBarcodeModal()" class="flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-widest text-slate-500 hover:bg-slate-200 transition-all">Cancel</button>
+            <a id="viewDetailsBtn" href="#" class="flex-1 py-3 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold uppercase tracking-widest text-center hover:bg-slate-300 transition-all flex items-center justify-center gap-1.5">
+                <i class="fas fa-eye text-[10px]"></i> Details
+            </a>
             <button onclick="doPrint()" class="flex-1 py-3 rounded-xl bg-orange-500 text-white text-xs font-bold uppercase tracking-widest shadow-lg shadow-orange-500/20 hover:bg-orange-600 transition-all">Print Label</button>
         </div>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
 <script>
+    function switchBarcodeTab(tab) {
+        const barcodeView = document.getElementById('barcodeView');
+        const qrcodeView = document.getElementById('qrcodeView');
+        const tabBarcode = document.getElementById('tabBarcode');
+        const tabQrcode = document.getElementById('tabQrcode');
+        
+        if (tab === 'barcode') {
+            barcodeView.classList.remove('hidden');
+            qrcodeView.classList.add('hidden');
+            tabBarcode.className = 'px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest bg-orange-500 text-white transition-all';
+            tabQrcode.className = 'px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest bg-slate-100 dark:bg-slate-800 text-slate-500 transition-all';
+        } else {
+            barcodeView.classList.add('hidden');
+            qrcodeView.classList.remove('hidden');
+            tabQrcode.className = 'px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest bg-orange-500 text-white transition-all';
+            tabBarcode.className = 'px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest bg-slate-100 dark:bg-slate-800 text-slate-500 transition-all';
+        }
+    }
+
     function printBarcode(btn) {
         const code = btn.getAttribute('data-code');
         const name = btn.getAttribute('data-name');
         const price = btn.getAttribute('data-price');
         const symbology = btn.getAttribute('data-symbology');
+        const scanUrl = window.location.origin + '/barcode/scan/' + encodeURIComponent(code);
 
         document.getElementById('barcodeProductName').textContent = name;
         document.getElementById('barcodePrice').textContent = 'Rs. ' + price;
+        document.getElementById('viewDetailsBtn').href = scanUrl;
         
+        // Reset to barcode tab
+        switchBarcodeTab('barcode');
+        
+        // Generate Barcode
         let format = symbology || 'CODE128';
         if (format === 'C128') format = 'CODE128';
         if (format === 'C39') format = 'CODE39';
@@ -176,7 +228,6 @@
                 font: "Outfit"
             });
         } catch(e) {
-            // Fallback to CODE128 which supports all characters
             try {
                 JsBarcode("#barcodeSVG", code, {
                     format: "CODE128",
@@ -190,6 +241,19 @@
                 console.error("Barcode generation error: ", e2);
             }
         }
+        
+        // Generate QR Code with scan URL
+        const canvas = document.getElementById('qrCanvas');
+        QRCode.toCanvas(canvas, scanUrl, {
+            width: 200,
+            margin: 2,
+            color: {
+                dark: '#0f172a',
+                light: '#ffffff'
+            }
+        }, function(error) {
+            if (error) console.error('QR Code error:', error);
+        });
         
         document.getElementById('barcodeModal').classList.remove('hidden');
     }
@@ -209,7 +273,9 @@
                         body { font-family: 'Outfit', sans-serif; text-align: center; padding: 20px; }
                         h4 { margin: 0 0 10px 0; font-size: 14px; }
                         p { margin: 10px 0 0 0; font-size: 18px; font-weight: bold; color: #f97316; }
-                        svg { max-width: 100%; }
+                        svg, canvas { max-width: 100%; }
+                        button { display: none !important; }
+                        .hidden { display: none !important; }
                     </style>
                 </head>
                 <body onload="window.print();window.close()">
@@ -219,5 +285,17 @@
         `);
         win.document.close();
     }
+
+    function scanProductListCamera() {
+        startGlobalCameraScanner(function(code) {
+            let cleanCode = code;
+            if (code.includes('/barcode/scan/')) {
+                const parts = code.split('/barcode/scan/');
+                cleanCode = parts[parts.length - 1];
+            }
+            window.location.href = window.location.origin + '/barcode/scan/' + encodeURIComponent(cleanCode);
+        });
+    }
 </script>
 @endsection
+

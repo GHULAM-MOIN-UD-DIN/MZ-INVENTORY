@@ -7,6 +7,7 @@ use App\Http\Controllers\Categories\CategoriesController;
 use App\Http\Controllers\Categories\Categories_List_Controller;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Product\ProductListController;
+use App\Http\Controllers\Product\BarcodeController;
 use App\Http\Controllers\POSController;
 use App\Http\Controllers\Sale\SaleController;
 use App\Http\Controllers\Purchase\PurchaseController;
@@ -58,6 +59,12 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/checkout', [POSController::class, 'checkout'])->name('pos.checkout');
         });
 
+        // Barcode Scan - scan barcode to see product details
+        Route::prefix('barcode')->group(function() {
+            Route::get('/scan/{code}', [BarcodeController::class, 'scan'])->name('barcode.scan');
+            Route::post('/lookup', [BarcodeController::class, 'lookup'])->name('barcode.lookup');
+        });
+
         // Sales
         Route::prefix('sales')->group(function() {
             Route::get('/', [SaleController::class, 'index'])->name('sale.index');
@@ -84,6 +91,26 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', [SettingController::class, 'index'])->name('setting.index');
             Route::post('/update', [SettingController::class, 'update'])->name('setting.update');
         });
+
+        // Notifications dismissal routes
+        Route::post('/notifications/dismiss/{id}', function ($id) {
+            $dismissed = session('dismissed_notifications', []);
+            if (!in_array($id, $dismissed)) {
+                session()->push('dismissed_notifications', $id);
+            }
+            return response()->json(['success' => true]);
+        })->name('notifications.dismiss');
+
+        Route::post('/notifications/dismiss-all', function (\Illuminate\Http\Request $request) {
+            $ids = $request->input('ids', []);
+            $dismissed = session('dismissed_notifications', []);
+            foreach ($ids as $id) {
+                if (!in_array($id, $dismissed)) {
+                    session()->push('dismissed_notifications', $id);
+                }
+            }
+            return response()->json(['success' => true]);
+        })->name('notifications.dismiss_all');
     });
 
     // Admin & Manager only

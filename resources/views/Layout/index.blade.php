@@ -17,6 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -459,10 +460,70 @@
                 </button>
 
                 <!-- Restored Notifications -->
-                <button class="relative w-10 h-10 rounded-xl flex items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                    <i class="fas fa-bell"></i>
-                    <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-orange-500 rounded-full border-2 border-white dark:border-slate-900"></span>
-                </button>
+                <div class="relative animate-fade-in" id="notifications-wrapper">
+                    <button onclick="toggleNotificationsDropdown(event)" class="relative w-10 h-10 rounded-xl flex items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-orange-100 hover:text-orange-600 dark:hover:bg-orange-950 dark:hover:text-orange-400 transition-all shadow-sm">
+                        <i class="fas fa-bell"></i>
+                        @if(count($notifications) > 0)
+                            <span id="notification-badge" class="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-[10px] font-black text-white border-2 border-white dark:border-slate-900 animate-pulse">
+                                {{ count($notifications) }}
+                            </span>
+                        @endif
+                    </button>
+
+                    <!-- Dropdown Card -->
+                    <div id="notifications-dropdown" class="hidden absolute right-0 mt-3 w-80 sm:w-96 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-2xl z-[100] animate-slide-up overflow-hidden">
+                        <!-- Dropdown Header -->
+                        <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-bell text-orange-500"></i>
+                                <span class="font-bold text-sm tracking-wide">Notifications</span>
+                            </div>
+                            @if(count($notifications) > 0)
+                                <button onclick="dismissAllNotifications(event)" class="text-[10px] font-extrabold uppercase tracking-widest text-orange-500 hover:text-orange-600 transition-colors">
+                                    Mark all read
+                                </button>
+                            @endif
+                        </div>
+
+                        <!-- Notifications List -->
+                        <div class="max-h-[350px] overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800" id="notifications-list-container">
+                            @forelse($notifications as $notification)
+                                <div id="notification-item-{{ $notification['id'] }}" class="p-4 flex gap-3 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-all group relative">
+                                    <div class="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center {{ $notification['color'] }}">
+                                        <i class="{{ $notification['icon'] }} text-xs"></i>
+                                    </div>
+                                    <div class="flex-1 min-w-0 pr-6">
+                                        <a href="{{ $notification['url'] }}" class="block">
+                                            <p class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-orange-500 transition-colors truncate">
+                                                {{ $notification['title'] }}
+                                            </p>
+                                            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-2">
+                                                {{ $notification['message'] }}
+                                            </p>
+                                        </a>
+                                        <span class="text-[9px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 block mt-1.5">
+                                            {{ $notification['time'] }}
+                                        </span>
+                                    </div>
+                                    <!-- Dismiss Button -->
+                                    <button onclick="dismissNotification(event, '{{ $notification['id'] }}')" class="absolute top-4 right-4 w-5 h-5 rounded-md flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100" title="Dismiss">
+                                        <i class="fas fa-times text-[10px]"></i>
+                                    </button>
+                                </div>
+                            @empty
+                                <div class="p-8 text-center flex flex-col items-center justify-center space-y-3" id="no-notifications-placeholder">
+                                    <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-500">
+                                        <i class="fas fa-bell-slash text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold text-slate-700 dark:text-slate-300">All caught up!</p>
+                                        <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-1">No alerts or warnings at the moment.</p>
+                                    </div>
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
 
                 <form action="{{ route('logout') }}" method="POST" class="inline-flex">
                     @csrf
@@ -547,6 +608,143 @@
             sub.classList.toggle('hidden');
             icon.classList.toggle('rotate-180');
         }
+
+        function toggleNotificationsDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('notifications-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const wrapper = document.getElementById('notifications-wrapper');
+            const dropdown = document.getElementById('notifications-dropdown');
+            if (wrapper && !wrapper.contains(event.target) && dropdown) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        function dismissNotification(event, id) {
+            event.stopPropagation();
+            event.preventDefault();
+            
+            // Fade out item immediately in UI for responsive feel
+            const item = document.getElementById(`notification-item-${id}`);
+            if (item) {
+                item.style.transition = 'all 0.3s ease';
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(20px)';
+                setTimeout(() => {
+                    item.remove();
+                    updateBadgeCount(-1);
+                }, 300);
+            }
+
+            fetch(`/notifications/dismiss/${id}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (!data.success) {
+                    console.error('Failed to dismiss notification');
+                }
+            })
+            .catch(err => console.error(err));
+        }
+
+        function dismissAllNotifications(event) {
+            event.stopPropagation();
+            event.preventDefault();
+
+            const items = document.querySelectorAll('[id^="notification-item-"]');
+            const ids = Array.from(items).map(item => item.id.replace('notification-item-', ''));
+
+            // Fade out all items
+            items.forEach(item => {
+                item.style.transition = 'all 0.3s ease';
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(20px)';
+                setTimeout(() => item.remove(), 300);
+            });
+
+            setTimeout(() => {
+                const listContainer = document.getElementById('notifications-list-container');
+                if (listContainer) {
+                    listContainer.innerHTML = `
+                        <div class="p-8 text-center flex flex-col items-center justify-center space-y-3" id="no-notifications-placeholder">
+                            <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-500">
+                                <i class="fas fa-bell-slash text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-700 dark:text-slate-300">All caught up!</p>
+                                <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-1">No alerts or warnings at the moment.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Hide header dismiss button
+                const markAllReadBtn = document.querySelector('#notifications-dropdown button[onclick="dismissAllNotifications(event)"]');
+                if (markAllReadBtn) markAllReadBtn.remove();
+                
+                // Hide badge
+                const badge = document.getElementById('notification-badge');
+                if (badge) badge.remove();
+            }, 300);
+
+            fetch('/notifications/dismiss-all', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ ids: ids })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (!data.success) {
+                    console.error('Failed to dismiss notifications');
+                }
+            })
+            .catch(err => console.error(err));
+        }
+
+        function updateBadgeCount(change) {
+            const badge = document.getElementById('notification-badge');
+            if (badge) {
+                let count = parseInt(badge.textContent.trim()) + change;
+                if (count <= 0) {
+                    badge.remove();
+                    
+                    // Also show empty state placeholder
+                    const listContainer = document.getElementById('notifications-list-container');
+                    if (listContainer) {
+                        listContainer.innerHTML = `
+                            <div class="p-8 text-center flex flex-col items-center justify-center space-y-3" id="no-notifications-placeholder">
+                                <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-500">
+                                    <i class="fas fa-bell-slash text-lg"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-700 dark:text-slate-300">All caught up!</p>
+                                    <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-1">No alerts or warnings at the moment.</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
+                    const markAllReadBtn = document.querySelector('#notifications-dropdown button[onclick="dismissAllNotifications(event)"]');
+                    if (markAllReadBtn) markAllReadBtn.remove();
+                } else {
+                    badge.textContent = count;
+                }
+            }
+        }
     </script>
     <script>
         @if(session('success'))
@@ -565,6 +763,154 @@
                 html: '<ul class="text-left space-y-1">@foreach($errors->all() as $error)<li><i class="fas fa-exclamation-circle text-orange-500 mr-2"></i>{{ $error }}</li>@endforeach</ul>'
             });
         @endif
+    <!-- Global Camera Scanner Modal -->
+    <div id="globalCameraScannerModal" class="fixed inset-0 z-[250] hidden flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl animate-slide-up border border-slate-100 dark:border-slate-800">
+            <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-900/50">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-orange-500 animate-ping"></span>
+                    <h3 class="font-extrabold text-slate-800 dark:text-slate-100 uppercase tracking-widest text-xs">Live Barcode/QR Scanner</h3>
+                </div>
+                <button onclick="closeGlobalCameraScanner()" class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 flex items-center justify-center transition-colors"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="p-6 space-y-4">
+                <!-- Camera Select -->
+                <div class="space-y-1">
+                    <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest block">Choose Camera</label>
+                    <select id="scannerCameraSelect" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800 text-sm font-bold focus:ring-2 focus:ring-orange-500/20 focus:outline-none"></select>
+                </div>
+
+                <!-- Preview Area -->
+                <div class="relative aspect-video w-full rounded-2xl overflow-hidden bg-slate-950 flex items-center justify-center border-2 border-orange-500/30">
+                    <div id="scannerReader" class="w-full h-full"></div>
+                    
+                    <!-- Scanner Guideline Overlay -->
+                    <div class="absolute inset-0 pointer-events-none border-[30px] border-black/45 flex items-center justify-center">
+                        <div class="w-full h-full border-2 border-dashed border-orange-500 rounded-lg relative">
+                            <!-- Scanning laser line -->
+                            <div class="absolute left-0 w-full h-[2px] bg-red-500 shadow-[0_0_10px_#ef4444] animate-pulse" style="top: 50%;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="text-[10px] text-center text-slate-500 dark:text-slate-400 font-bold"><i class="fas fa-info-circle text-orange-500 mr-1"></i>Hold the barcode steady inside the box to scan</p>
+            </div>
+            
+            <div class="p-6 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex gap-3">
+                <button onclick="closeGlobalCameraScanner()" class="flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-widest text-slate-500 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 transition-all">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let html5QrcodeScanner = null;
+        let onScanSuccessCallback = null;
+
+        function startGlobalCameraScanner(callback) {
+            onScanSuccessCallback = callback;
+            document.getElementById('globalCameraScannerModal').classList.remove('hidden');
+            
+            Html5Qrcode.getCameras().then(devices => {
+                const cameraSelect = document.getElementById('scannerCameraSelect');
+                cameraSelect.innerHTML = '';
+                
+                if (devices && devices.length) {
+                    devices.forEach(device => {
+                        const option = document.createElement('option');
+                        option.value = device.id;
+                        option.text = device.label || `Camera ${cameraSelect.length + 1}`;
+                        cameraSelect.appendChild(option);
+                    });
+                    
+                    cameraSelect.onchange = () => {
+                        stopCameraAndRestart(cameraSelect.value);
+                    };
+
+                    let backCamera = devices.find(device => device.label.toLowerCase().includes('back') || device.label.toLowerCase().includes('environment') || device.label.toLowerCase().includes('rear'));
+                    let defaultCameraId = backCamera ? backCamera.id : devices[0].id;
+                    cameraSelect.value = defaultCameraId;
+                    
+                    startCamera(defaultCameraId);
+                } else {
+                    Swal.fire('No Camera Found', 'Please connect a camera or allow access.', 'error');
+                    closeGlobalCameraScanner();
+                }
+            }).catch(err => {
+                console.error(err);
+                Swal.fire('Camera Error', 'Could not access camera: ' + err.message, 'error');
+                closeGlobalCameraScanner();
+            });
+        }
+
+        function startCamera(cameraId) {
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.stop().then(() => {
+                    initializeAndStart(cameraId);
+                }).catch(() => {
+                    initializeAndStart(cameraId);
+                });
+            } else {
+                initializeAndStart(cameraId);
+            }
+        }
+
+        function initializeAndStart(cameraId) {
+            html5QrcodeScanner = new Html5Qrcode("scannerReader");
+            html5QrcodeScanner.start(
+                cameraId, 
+                {
+                    fps: 15,
+                    qrbox: (width, height) => {
+                        return { width: Math.min(width * 0.8, 250), height: Math.min(height * 0.8, 250) };
+                    }
+                },
+                (decodedText, decodedResult) => {
+                    try {
+                        const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav");
+                        audio.volume = 0.5;
+                        audio.play();
+                    } catch(e) {}
+
+                    closeGlobalCameraScanner();
+                    if (onScanSuccessCallback) {
+                        onScanSuccessCallback(decodedText);
+                    }
+                },
+                (errorMessage) => {
+                    // Verbose scan error log, safe to ignore
+                }
+            ).catch(err => {
+                console.error("Failed to start camera:", err);
+            });
+        }
+
+        function stopCameraAndRestart(cameraId) {
+            if (html5QrcodeScanner && html5QrcodeScanner.isScanning) {
+                html5QrcodeScanner.stop().then(() => {
+                    startCamera(cameraId);
+                }).catch(err => {
+                    startCamera(cameraId);
+                });
+            } else {
+                startCamera(cameraId);
+            }
+        }
+
+        function closeGlobalCameraScanner() {
+            document.getElementById('globalCameraScannerModal').classList.add('hidden');
+            if (html5QrcodeScanner) {
+                if (html5QrcodeScanner.isScanning) {
+                    html5QrcodeScanner.stop().then(() => {
+                        html5QrcodeScanner = null;
+                    }).catch(err => {
+                        html5QrcodeScanner = null;
+                    });
+                } else {
+                    html5QrcodeScanner = null;
+                }
+            }
+        }
     </script>
 </body>
 

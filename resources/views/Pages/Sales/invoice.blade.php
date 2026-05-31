@@ -48,10 +48,10 @@
     </div>
 
     <div class="header text-center">
-        <div class="store-name">INVENTORY MS</div>
+        <div class="store-name">INVENTORY MZ</div>
         <div class="details">
             Retail Management System<br>
-            Phone: +92 300 1234567<br>
+            Phone: +92 3708541533<br>
             Date: {{ $sale->created_at->format('d-M-Y H:i') }}
         </div>
     </div>
@@ -117,7 +117,7 @@
     <div class="footer text-center">
         THANK YOU FOR SHOPPING!<br>
         Please visit again.<br>
-        Software by Antigravity AI
+        Software by Moin & Farrokh
     </div>
 </body>
 </html>

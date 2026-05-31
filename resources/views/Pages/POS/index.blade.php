@@ -15,10 +15,16 @@
     <div class="flex-1 flex flex-col gap-6 lg:overflow-hidden">
         <!-- Search & Filter -->
         <div class="premium-card p-4 flex flex-col sm:flex-row gap-4 stagger-1">
-            <div class="relative flex-1">
-                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="text" id="productSearch" placeholder="Scan Barcode or Search..." 
-                       class="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 focus:border-orange-500 transition-all text-sm">
+            <div class="relative flex-1 flex gap-2">
+                <div class="relative flex-1">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="productSearch" placeholder="Scan Barcode or Search..." 
+                           class="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 focus:border-orange-500 transition-all text-sm">
+                </div>
+                <button type="button" onclick="scanPOSCamera()" class="px-4 py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-orange-500/20" title="Scan Barcode using Camera">
+                    <i class="fas fa-camera text-sm"></i>
+                    <span class="hidden sm:inline text-xs font-black uppercase tracking-wider">Scan Camera</span>
+                </button>
             </div>
             <select id="categoryFilter" class="px-6 py-3 rounded-xl border-2 border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 font-bold text-[10px] uppercase tracking-widest text-slate-500">
                 <option value="">All Categories</option>
@@ -320,9 +326,75 @@
         }
     }
 
-    // Real-time Search
-    document.getElementById('productSearch').addEventListener('input', function(e) {
+    // Real-time Search & Barcode Scanner Support
+    let scanBuffer = '';
+    let scanTimeout = null;
+    const searchInput = document.getElementById('productSearch');
+
+    // Detect barcode scanner input (rapid keypresses)
+    searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const searchVal = searchInput.value.trim();
+            if (searchVal.length > 0) {
+                // Try barcode lookup via API
+                fetch('{{ route("barcode.lookup") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ code: searchVal })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.found) {
+                        // Auto-add to cart
+                        const p = data.product;
+                        addToCart({
+                            id: p.id,
+                            name: p.name,
+                            code: p.code,
+                            price: parseFloat(p.price),
+                            quantity: p.quantity,
+                            image: p.image
+                        });
+                        searchInput.value = '';
+                        // Reset filter display
+                        const cards = document.querySelectorAll('#productsGrid > div[data-code]');
+                        cards.forEach(card => card.style.display = 'block');
+                        
+                        // Success beep feedback
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
+                            title: p.name + ' added to cart!',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            timerProgressBar: true
+                        });
+                    } else {
+                        // Not found - do normal search filter
+                        filterProducts(searchVal);
+                    }
+                })
+                .catch(err => {
+                    filterProducts(searchVal);
+                });
+            }
+            return;
+        }
+    });
+
+    searchInput.addEventListener('input', function(e) {
         const search = e.target.value.toLowerCase();
+        filterProducts(search);
+    });
+
+    function filterProducts(search) {
+        search = search.toLowerCase();
         const cards = document.querySelectorAll('#productsGrid > div[data-code]');
         cards.forEach(card => {
             const name = card.querySelector('h4').textContent.toLowerCase();
@@ -333,13 +405,63 @@
                 card.style.display = 'none';
             }
         });
-    });
+    }
 
     // Category Filter
     document.getElementById('categoryFilter').addEventListener('change', function(e) {
         const catId = e.target.value;
         window.location.href = `{{ route('pos.index') }}?category_id=${catId}`;
     });
+
+    function scanPOSCamera() {
+        startGlobalCameraScanner(function(code) {
+            let cleanCode = code;
+            if (code.includes('/barcode/scan/')) {
+                const parts = code.split('/barcode/scan/');
+                cleanCode = parts[parts.length - 1];
+            }
+            
+            fetch('{{ route("barcode.lookup") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ code: cleanCode })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.found) {
+                    const p = data.product;
+                    addToCart({
+                        id: p.id,
+                        name: p.name,
+                        code: p.code,
+                        price: parseFloat(p.price),
+                        quantity: p.quantity,
+                        image: p.image
+                    });
+                    
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: p.name + ' added to cart!',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        timerProgressBar: true
+                    });
+                } else {
+                    Swal.fire('Product Not Found', 'No product found with code: ' + cleanCode, 'error');
+                }
+            })
+            .catch(err => {
+                console.error("Error lookup scanned code:", err);
+                Swal.fire('Error', 'Failed to lookup scanned code', 'error');
+            });
+        });
+    }
 </script>
 
 <style>
