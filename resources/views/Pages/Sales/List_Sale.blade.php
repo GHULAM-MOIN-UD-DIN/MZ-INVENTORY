@@ -11,10 +11,10 @@
             <p class="text-slate-500 dark:text-slate-400 mt-1">Track and manage all your outgoing sales transactions.</p>
         </div>
         <div class="flex items-center gap-3">
-            <button class="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shadow-sm">
-                <i class="fas fa-file-invoice text-orange-500"></i>
+            <a href="{{ route('pos.index') }}" class="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shadow-sm">
+                <i class="fas fa-cash-register text-orange-500"></i>
                 <span>POS System</span>
-            </button>
+            </a>
             <a href="{{ route('sale.create') }}" class="btn-premium">
                 <i class="fas fa-plus"></i>
                 <span>Create Sale</span>
@@ -26,7 +26,7 @@
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 stagger-2 px-4 md:px-0">
         <div class="premium-card p-4 md:p-6">
             <p class="text-[8px] md:text-xs font-bold text-slate-400 uppercase tracking-widest">Revenue</p>
-            <h3 class="text-base md:text-2xl font-extrabold mt-1 text-orange-500">Rs. {{ number_format($sales->sum('grand_total'), 0) }}</h3>
+            <h3 class="text-base md:text-2xl font-extrabold mt-1 text-orange-500">Rs. {{ number_format($sales->where('status', '!=', 'Refunded')->sum('grand_total'), 0) }}</h3>
         </div>
         <div class="premium-card p-4 md:p-6">
             <p class="text-[8px] md:text-xs font-bold text-slate-400 uppercase tracking-widest">Orders</p>
@@ -38,7 +38,7 @@
         </div>
         <div class="premium-card p-4 md:p-6">
             <p class="text-[8px] md:text-xs font-bold text-slate-400 uppercase tracking-widest">Avg Order</p>
-            <h3 class="text-base md:text-2xl font-extrabold mt-1 text-orange-500">Rs. {{ number_format($sales->avg('grand_total') ?? 0, 0) }}</h3>
+            <h3 class="text-base md:text-2xl font-extrabold mt-1 text-orange-500">Rs. {{ number_format($sales->where('status', '!=', 'Refunded')->avg('grand_total') ?? 0, 0) }}</h3>
         </div>
     </div>
 
@@ -88,16 +88,16 @@
                                         <i class="fas fa-file-pdf text-[10px]"></i>
                                     </a>
                                     @if($sale->status != 'Refunded')
-                                        <form action="{{ route('sale.refund', $sale->id) }}" method="POST" class="inline" onsubmit="return confirm('Refund this sale? Product quantity will be restored.')">
+                                        <form id="refund-form-{{ $sale->id }}" action="{{ route('sale.refund', $sale->id) }}" method="POST" class="inline">
                                             @csrf
-                                            <button class="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all shadow-sm" title="Process Refund">
+                                            <button type="button" onclick="confirmRefund({{ $sale->id }})" class="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all shadow-sm" title="Process Refund">
                                                 <i class="fas fa-rotate-left text-[10px]"></i>
                                             </button>
                                         </form>
                                     @endif
-                                    <form action="{{ route('sale.destroy', $sale->id) }}" method="POST" class="inline" onsubmit="return confirm('Remove this sale record?')">
+                                    <form id="delete-sale-form-{{ $sale->id }}" action="{{ route('sale.destroy', $sale->id) }}" method="POST" class="inline">
                                         @csrf @method('DELETE')
-                                        <button class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
+                                        <button type="button" onclick="confirmDeleteSale({{ $sale->id }})" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
                                             <i class="fas fa-trash text-[10px]"></i>
                                         </button>
                                     </form>
@@ -117,4 +117,36 @@
         </div>
     </div>
 </div>
+
+<script>
+function confirmRefund(id) {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Process Refund?',
+        text: 'This sale will be refunded and product quantities will be restored to inventory.',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Refund',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('refund-form-' + id).submit();
+        }
+    });
+}
+
+function confirmDeleteSale(id) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Delete Sale?',
+        text: 'This sale record will be permanently removed. This action cannot be undone.',
+        showCancelButton: true,
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('delete-sale-form-' + id).submit();
+        }
+    });
+}
+</script>
 @endsection

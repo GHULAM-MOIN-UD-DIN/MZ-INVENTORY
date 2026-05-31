@@ -14,7 +14,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $total_sales = Sale::sum('grand_total');
+        $total_sales = Sale::where('status', '!=', 'Refunded')->sum('grand_total');
         $total_purchases = Purchase::sum('grand_total');
         $total_customers = Customer::count();
         $total_suppliers = Supplier::count();
@@ -22,7 +22,7 @@ class DashboardController extends Controller
         $pending_sales = Sale::where('status', 'Pending')->count();
         $total_products = Product::count();
         
-        // Net Profit Calculation (Sales - Purchases)
+        // Net Profit Calculation (Sales - Purchases) excluding refunded
         $net_profit = $total_sales - $total_purchases;
 
         // Recent Activity (last 5 sales)
@@ -31,9 +31,10 @@ class DashboardController extends Controller
         // Latest Products
         $latest_products = Product::with('category')->latest()->take(5)->get();
 
-        // Chart Data: Sales for the last 7 days
+        // Chart Data: Sales for the last 7 days (excluding refunded)
         $sales_data = Sale::selectRaw('CAST(created_at AS DATE) as date, SUM(grand_total) as total')
             ->where('created_at', '>=', now()->subDays(7))
+            ->where('status', '!=', 'Refunded')
             ->groupByRaw('CAST(created_at AS DATE)')
             ->orderByRaw('CAST(created_at AS DATE) ASC')
             ->get();

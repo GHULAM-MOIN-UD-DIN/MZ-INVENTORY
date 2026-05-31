@@ -87,9 +87,9 @@
                                     <button class="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all">
                                         <i class="fas fa-eye text-xs"></i>
                                     </button>
-                                    <form action="{{ route('purchase.destroy', $purchase->id) }}" method="POST" class="inline" onsubmit="return confirm('Remove this purchase record?')">
+                                    <form id="delete-purchase-form-{{ $purchase->id }}" action="{{ route('purchase.destroy', $purchase->id) }}" method="POST" class="inline">
                                         @csrf @method('DELETE')
-                                        <button class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
+                                        <button type="button" onclick="confirmDeletePurchase({{ $purchase->id }})" class="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
                                             <i class="fas fa-trash text-xs"></i>
                                         </button>
                                     </form>
@@ -109,4 +109,21 @@
         </div>
     </div>
 </div>
+
+<script>
+function confirmDeletePurchase(id) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Delete Purchase?',
+        text: 'This purchase record will be permanently removed. This cannot be undone.',
+        showCancelButton: true,
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('delete-purchase-form-' + id).submit();
+        }
+    });
+}
+</script>
 @endsection

@@ -763,6 +763,7 @@
                 html: '<ul class="text-left space-y-1">@foreach($errors->all() as $error)<li><i class="fas fa-exclamation-circle text-orange-500 mr-2"></i>{{ $error }}</li>@endforeach</ul>'
             });
         @endif
+    </script>
     <!-- Global Camera Scanner Modal -->
     <div id="globalCameraScannerModal" class="fixed inset-0 z-[250] hidden flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl animate-slide-up border border-slate-100 dark:border-slate-800">

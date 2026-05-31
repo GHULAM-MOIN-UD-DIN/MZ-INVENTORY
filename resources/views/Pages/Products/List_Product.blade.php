@@ -109,9 +109,9 @@
                                     <a href="{{ route('product.edit', $product->id) }}" class="w-7 h-7 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all">
                                         <i class="fas fa-pen text-[10px]"></i>
                                     </a>
-                                    <form action="{{ route('product.destroy', $product->id) }}" method="POST" class="inline" onsubmit="return confirm('Remove this product?')">
+                                    <form id="delete-product-form-{{ $product->id }}" action="{{ route('product.destroy', $product->id) }}" method="POST" class="inline">
                                         @csrf @method('DELETE')
-                                        <button class="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all">
+                                        <button type="button" onclick="confirmDeleteProduct({{ $product->id }})" class="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all">
                                             <i class="fas fa-trash text-[10px]"></i>
                                         </button>
                                     </form>
@@ -243,17 +243,25 @@
         }
         
         // Generate QR Code with scan URL
-        const canvas = document.getElementById('qrCanvas');
-        QRCode.toCanvas(canvas, scanUrl, {
-            width: 200,
-            margin: 2,
-            color: {
-                dark: '#0f172a',
-                light: '#ffffff'
+        try {
+            const canvas = document.getElementById('qrCanvas');
+            if (canvas && typeof QRCode !== 'undefined') {
+                QRCode.toCanvas(canvas, scanUrl, {
+                    width: 200,
+                    margin: 2,
+                    color: {
+                        dark: '#0f172a',
+                        light: '#ffffff'
+                    }
+                }, function(error) {
+                    if (error) console.error('QR Code error:', error);
+                });
+            } else {
+                console.warn('QRCode library is not loaded or Canvas is missing.');
             }
-        }, function(error) {
-            if (error) console.error('QR Code error:', error);
-        });
+        } catch (e) {
+            console.error('QR Code generation failed:', e);
+        }
         
         document.getElementById('barcodeModal').classList.remove('hidden');
     }
@@ -294,6 +302,21 @@
                 cleanCode = parts[parts.length - 1];
             }
             window.location.href = window.location.origin + '/barcode/scan/' + encodeURIComponent(cleanCode);
+        });
+    }
+
+    function confirmDeleteProduct(id) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Delete Product?',
+            text: 'This product will be permanently removed from inventory. This cannot be undone.',
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-product-form-' + id).submit();
+            }
         });
     }
 </script>

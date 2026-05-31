@@ -46,6 +46,8 @@ class AppServiceProvider extends ServiceProvider
         try {
             \Illuminate\Support\Facades\View::composer('Layout.index', function ($view) {
                 if (\Illuminate\Support\Facades\Auth::check()) {
+                    $user = \Illuminate\Support\Facades\Auth::user();
+                    $isAdminOrManager = $user && in_array($user->role, ['admin', 'manager']);
                     $dismissed = session('dismissed_notifications', []);
                     $notifications = [];
 
@@ -60,7 +62,7 @@ class AppServiceProvider extends ServiceProvider
                                     'type' => 'low_stock',
                                     'title' => 'Low Stock Warning',
                                     'message' => '"' . $product->name . '" has only ' . $product->quantity . ' items left.',
-                                    'url' => route('product.index') . '?search=' . urlencode($product->name),
+                                    'url' => $isAdminOrManager ? route('product.index') . '?search=' . urlencode($product->name) : '#',
                                     'icon' => 'fas fa-triangle-exclamation',
                                     'color' => 'text-orange-500 bg-orange-500/10 dark:bg-orange-500/20',
                                     'time' => 'Inventory Alert'
@@ -106,7 +108,7 @@ class AppServiceProvider extends ServiceProvider
                                     'type' => 'new_product',
                                     'title' => 'New Product Added',
                                     'message' => 'Product "' . $product->name . '" has been added to inventory.',
-                                    'url' => route('product.index') . '?search=' . urlencode($product->name),
+                                    'url' => $isAdminOrManager ? route('product.index') . '?search=' . urlencode($product->name) : '#',
                                     'icon' => 'fas fa-box',
                                     'color' => 'text-green-500 bg-green-500/10 dark:bg-green-500/20',
                                     'time' => $product->created_at ? $product->created_at->diffForHumans() : 'Just now'
@@ -153,7 +155,7 @@ class AppServiceProvider extends ServiceProvider
                                     'type' => 'new_purchase',
                                     'title' => 'New Purchase Ordered',
                                     'message' => 'Purchase ' . $purchase->reference . ' from ' . $supplierName . ' was recorded.',
-                                    'url' => route('purchase.index'),
+                                    'url' => $isAdminOrManager ? route('purchase.index') : '#',
                                     'icon' => 'fas fa-truck',
                                     'color' => 'text-purple-500 bg-purple-500/10 dark:bg-purple-500/20',
                                     'time' => $purchase->created_at ? $purchase->created_at->diffForHumans() : 'Just now'
@@ -175,7 +177,7 @@ class AppServiceProvider extends ServiceProvider
                                     'type' => 'new_supplier',
                                     'title' => 'New Supplier Registered',
                                     'message' => 'Supplier "' . $supplier->name . '" has been successfully registered.',
-                                    'url' => route('supplier.index'),
+                                    'url' => $isAdminOrManager ? route('supplier.index') : '#',
                                     'icon' => 'fas fa-user-tie',
                                     'color' => 'text-indigo-500 bg-indigo-500/10 dark:bg-indigo-500/20',
                                     'time' => $supplier->created_at ? $supplier->created_at->diffForHumans() : 'Just now'
